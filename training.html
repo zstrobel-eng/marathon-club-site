@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UW-Madison Marathon Club - Training Plans</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="topBanner">
+      <img src="sample.JPG" alt="Banner" class="banner" />
+    </section>
+
+    <!-- Navbar -->
+    <nav
+      class="navbar site-navbar is-spaced"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <strong class="has-text-white">UW-Madison Marathon</strong>
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="index.html">Home</a>
+          <a class="navbar-item" href="routes.html">Routes</a>
+          <a class="navbar-item" href="resources.html">Resources</a>
+          <a class="navbar-item" href="calendar.html">Calendar</a>
+          <a class="navbar-item" href="training.html">Training Plan</a>
+          <a class="navbar-item" href="leadership.html">Leadership</a>
+          <a class="navbar-item" href="about.html">About</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a id="profileBtn" class="button is-light">Profile</a>
+              <a id="signInBtn" class="button is-light">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Training Plans</h1>
+        <p class="subtitle">Choose a plan that fits your goal.</p>
+
+        <div class="box">
+          <h2 class="title is-5">Beginner Marathon Plan</h2>
+          <p>Great for first-time marathoners (16 weeks).</p>
+          <a
+            href="https://www.halhigdon.com/training/marathon-training/"
+            target="_blank"
+            class="button is-link"
+            >View Plan</a
+          >
+        </div>
+
+        <div class="box">
+          <h2 class="title is-5">Intermediate Marathon Plan</h2>
+          <p>For runners who have completed a marathon before (16–18 weeks).</p>
+          <a
+            href="https://www.runnersworld.com/training/a20801386/training-plans/"
+            target="_blank"
+            class="button is-link"
+            >View Plan</a
+          >
+        </div>
+
+        <div class="box">
+          <h2 class="title is-5">Half Marathon Training</h2>
+          <p>Step up with a strong half marathon before going full.</p>
+          <a
+            href="https://www.nike.com/ntc-app"
+            target="_blank"
+            class="button is-link"
+            >View Plan</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer><p>&copy; 2025 UW-Madison Marathon Club</p></footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

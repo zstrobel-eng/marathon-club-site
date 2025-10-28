@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - UW-Madison Marathon Club</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Banner -->
+    <section id="topBanner">
+      <img src="sample.JPG" alt="Marathon Banner" class="banner" />
+    </section>
+
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <strong>Marathon Club</strong>
+        </a>
+
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasic"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasic" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="index.html">Home</a>
+          <a class="navbar-item" href="routes.html">Routes</a>
+          <a class="navbar-item" href="resources.html">Resources</a>
+          <a class="navbar-item" href="calendar.html">Calendar</a>
+          <a class="navbar-item" href="training.html">Training Plans</a>
+          <a class="navbar-item" href="leadership.html">Leadership</a>
+          <a class="navbar-item" href="about.html">About</a>
+          <a class="navbar-item is-active" href="admin.html">Admin</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <button id="signOutButton" class="button is-light">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Admin Dashboard</h1>
+        <p class="subtitle">Manage club content, events, and users here.</p>
+
+        <div class="columns is-multiline">
+          <!-- Users -->
+          <div class="column is-half">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">Users</p>
+              </header>
+              <div class="card-content">
+                <p><strong>Total Members:</strong> 42</p>
+                <ul>
+                  <li>Alice Johnson – alice@wisc.edu</li>
+                  <li>Bob Smith – bob@wisc.edu</li>
+                  <li>…</li>
+                </ul>
+              </div>
+              <footer class="card-footer">
+                <a
+                  class="card-footer-item modal-trigger"
+                  data-target="manageUsersModal"
+                  >Manage Users</a
+                >
+              </footer>
+            </div>
+          </div>
+
+          <!-- Routes -->
+          <div class="column is-half">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">Routes</p>
+              </header>
+              <div class="card-content">
+                <p><strong>Routes Uploaded:</strong> 12</p>
+                <ul>
+                  <li>Lake Mendota 5K</li>
+                  <li>Arboretum 10K</li>
+                </ul>
+              </div>
+              <footer class="card-footer">
+                <a
+                  class="card-footer-item modal-trigger"
+                  data-target="addRouteModal"
+                  >Add Route</a
+                >
+                <a
+                  class="card-footer-item modal-trigger"
+                  data-target="manageRoutesModal"
+                  >Manage Routes</a
+                >
+              </footer>
+            </div>
+          </div>
+
+          <!-- Events -->
+          <div class="column is-half">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">Events</p>
+              </header>
+              <div class="card-content">
+                <p><strong>Upcoming Events:</strong></p>
+                <ul>
+                  <li>Group Long Run – Oct 12</li>
+                  <li>Team Meeting – Oct 18</li>
+                </ul>
+              </div>
+              <footer class="card-footer">
+                <a
+                  class="card-footer-item modal-trigger"
+                  data-target="createEventModal"
+                  >Create Event</a
+                >
+                <a
+                  class="card-footer-item modal-trigger"
+                  data-target="manageEventsModal"
+                  >Manage Events</a
+                >
+              </footer>
+            </div>
+          </div>
+
+          <!-- Analytics -->
+          <div class="column is-half">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">Analytics</p>
+              </header>
+              <div class="card-content">
+                <p><strong>Site Visits:</strong> 325 this month</p>
+                <p><strong>Active Members:</strong> 18 logged in this week</p>
+                <p><strong>Most Viewed Page:</strong> Routes</p>
+              </div>
+              <footer class="card-footer">
+                <a href="#" class="card-footer-item">View Reports</a>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 UW-Madison Marathon Club</p>
+    </footer>
+
+    <!-- Placeholder Modals -->
+    <div id="manageUsersModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Manage Users</p>
+          <button class="delete close-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>This is where user management (edit/delete users) will appear.</p>
+        </section>
+      </div>
+    </div>
+
+    <div id="addRouteModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Add Route</p>
+          <button class="delete close-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">Route Name</label>
+            <input class="input" type="text" placeholder="Enter route name" />
+          </div>
+          <div class="field">
+            <label class="label">Strava Embed Link</label>
+            <input class="input" type="text" placeholder="Paste Strava link" />
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-primary">Save Route</button>
+        </footer>
+      </div>
+    </div>
+
+    <div id="manageRoutesModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Manage Routes</p>
+          <button class="delete close-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>This is where routes will be listed for editing/deletion.</p>
+        </section>
+      </div>
+    </div>
+
+    <div id="createEventModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Create Event</p>
+          <button class="delete close-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">Event Title</label>
+            <input class="input" type="text" placeholder="Enter event title" />
+          </div>
+          <div class="field">
+            <label class="label">Date</label>
+            <input class="input" type="date" />
+          </div>
+          <div class="field">
+            <label class="label">Description</label>
+            <textarea
+              class="textarea"
+              placeholder="Enter event details"
+            ></textarea>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-primary">Save Event</button>
+        </footer>
+      </div>
+    </div>
+
+    <div id="manageEventsModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Manage Events</p>
+          <button class="delete close-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>This is where events will be listed for editing/deletion.</p>
+        </section>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      // Modal open/close
+      document.querySelectorAll(".modal-trigger").forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          const target = trigger.getAttribute("data-target");
+          document.getElementById(target).classList.add("is-active");
+        });
+      });
+      document
+        .querySelectorAll(".close-modal, .modal-background")
+        .forEach((el) => {
+          el.addEventListener("click", () => {
+            el.closest(".modal").classList.remove("is-active");
+          });
+        });
+    </script>
+  </body>
+</html>

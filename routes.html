@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UW-Madison Marathon Club - Routes</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Banner -->
+    <section id="topBanner">
+      <img src="sample.JPG" alt="Marathon Banner" class="banner" />
+    </section>
+
+    <!-- Navbar -->
+    <nav
+      class="navbar site-navbar is-spaced"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <strong class="has-text-white">UW-Madison Marathon</strong>
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="index.html">Home</a>
+          <a class="navbar-item" href="routes.html">Routes</a>
+          <a class="navbar-item" href="resources.html">Resources</a>
+          <a class="navbar-item" href="calendar.html">Calendar</a>
+          <a class="navbar-item" href="training.html">Training Plan</a>
+          <a class="navbar-item" href="leadership.html">Leadership</a>
+          <a class="navbar-item" href="about.html">About</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a id="profileBtn" class="button is-light">Profile</a>
+              <a id="signInBtn" class="button is-light">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Running Routes</h1>
+        <p class="subtitle">
+          Explore popular team routes organized by distance. Click a route to
+          view details.
+        </p>
+
+        <!-- 2-4 Miles -->
+        <h2 class="title is-4">2–4 Miles</h2>
+        <ul>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal1"
+              >Route 1 (2–4 mi)</a
+            >
+          </li>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal2"
+              >Route 2 (2–4 mi)</a
+            >
+          </li>
+        </ul>
+
+        <!-- 4-6 Miles -->
+        <h2 class="title is-4 pt-6">4–6 Miles</h2>
+        <ul>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal3"
+              >Route 1 (4–6 mi)</a
+            >
+          </li>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal4"
+              >Route 2 (4–6 mi)</a
+            >
+          </li>
+        </ul>
+
+        <!-- 6-10 Miles -->
+        <h2 class="title is-4 pt-6">6–10 Miles</h2>
+        <ul>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal5"
+              >Arboretum Loop (7.1 mi)</a
+            >
+          </li>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal6"
+              >Route 2 (6–10 mi)</a
+            >
+          </li>
+        </ul>
+
+        <!-- 10-15 Miles -->
+        <h2 class="title is-4 pt-6">10–15 Miles</h2>
+        <ul>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal7"
+              >Lake Monona Loop (13.6 mi)</a
+            >
+          </li>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal8"
+              >Route 2 (10–15 mi)</a
+            >
+          </li>
+        </ul>
+
+        <!-- 15-20 Miles -->
+        <h2 class="title is-4 pt-6">15–20 Miles</h2>
+        <ul>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal9"
+              >Route 1 (15–20 mi)</a
+            >
+          </li>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal10"
+              >Route 2 (15–20 mi)</a
+            >
+          </li>
+        </ul>
+
+        <!-- 20-26.22 Miles -->
+        <h2 class="title is-4 pt-6">20–26.22 Miles</h2>
+        <ul>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal11"
+              >Lake Monona + Arboretum Loop (23.3 mi)</a
+            >
+          </li>
+          <li>
+            <a href="#" class="route-link" data-target="routeModal12"
+              >Route 2 (20–26.22 mi)</a
+            >
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Route Modals -->
+    <!-- Replace iframe src with real Strava embed links -->
+    <div id="routeModal1" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder1"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal2" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder2"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal3" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder3"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal4" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder4"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal5" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div
+          class="strava-embed-placeholder"
+          data-embed-type="route"
+          data-embed-id="3408286920208265438"
+          data-style="standard"
+          data-map-hash="12.03/43.05224/-89.42371"
+          data-from-embed="true"
+        ></div>
+        <script src="https://strava-embeds.com/embed.js"></script>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal6" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder6"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal7" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div
+          class="strava-embed-placeholder"
+          data-embed-type="route"
+          data-embed-id="3408685767358839292"
+          data-style="standard"
+          data-map-hash="11.28/43.0678/-89.3625"
+          data-from-embed="true"
+        ></div>
+        <script src="https://strava-embeds.com/embed.js"></script>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal8" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder8"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal9" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder9"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal10" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder10"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal11" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div
+          class="strava-embed-placeholder"
+          data-embed-type="route"
+          data-embed-id="3408686612983771458"
+          data-style="standard"
+          data-from-embed="false"
+        ></div>
+        <script src="https://strava-embeds.com/embed.js"></script>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <div id="routeModal12" class="modal route-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <iframe
+          class="route-embed"
+          src="https://www.strava.com/routes/placeholder12"
+        ></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Sign In</p>
+          <button id="signInClose" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">Username</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Enter username" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+              <input
+                class="input"
+                type="password"
+                placeholder="Enter password"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="checkbox">
+              <input type="checkbox" id="adminToggle" /> Sign in as admin
+            </label>
+          </div>
+          <div class="field is-hidden" id="adminCodeField">
+            <label class="label">Admin Code</label>
+            <div class="control">
+              <input
+                class="input"
+                type="password"
+                placeholder="Enter admin code"
+              />
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-primary">Sign In</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 UW-Madison Marathon Club</p>
+    </footer>
+
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UW-Madison Marathon Club - Calendar</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Banner -->
+    <section id="topBanner">
+      <img src="sample.JPG" alt="Marathon Banner" class="banner" />
+    </section>
+
+    <!-- Navbar -->
+    <nav
+      class="navbar site-navbar is-spaced"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <strong class="has-text-white">UW-Madison Marathon</strong>
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="index.html">Home</a>
+          <a class="navbar-item" href="routes.html">Routes</a>
+          <a class="navbar-item" href="resources.html">Resources</a>
+          <a class="navbar-item" href="calendar.html">Calendar</a>
+          <a class="navbar-item" href="training.html">Training Plan</a>
+          <a class="navbar-item" href="leadership.html">Leadership</a>
+          <a class="navbar-item" href="about.html">About</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a id="profileBtn" class="button is-light">Profile</a>
+              <a id="signInBtn" class="button is-light">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Team Calendar</h1>
+        <p class="subtitle">
+          Upcoming practices, races, and events. RSVP below.
+        </p>
+
+        <div class="box">
+          <h2 class="title is-5">Long Run - Saturday, Oct 5</h2>
+          <p>
+            Meet at Memorial Union, 8:00 AM. 10-mile loop around Lake Monona.
+          </p>
+          <button class="button is-link">RSVP</button>
+        </div>
+
+        <div class="box">
+          <h2 class="title is-5">Tempo Run - Tuesday, Oct 8</h2>
+          <p>
+            Meet at Camp Randall, 6:00 PM. 6 miles total with 3 miles at tempo
+            pace.
+          </p>
+          <button class="button is-link">RSVP</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Sign In</p>
+          <button id="signInClose" class="delete"></button>
+        </header>
+        <section class="modal-card-body">
+          <input class="input" type="text" placeholder="Username" /><br /><br />
+          <input
+            class="input"
+            type="password"
+            placeholder="Password"
+          /><br /><br />
+          <label class="checkbox">
+            <input type="checkbox" id="adminToggle" /> Sign in as admin
+          </label>
+          <div class="field is-hidden" id="adminCodeField">
+            <input class="input" type="password" placeholder="Admin Code" />
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-primary">Sign In</button>
+        </footer>
+      </div>
+    </div>
+
+    <footer><p>&copy; 2025 UW-Madison Marathon Club</p></footer>
+    <script src="main.js"></script>
+  </body>
+</html>

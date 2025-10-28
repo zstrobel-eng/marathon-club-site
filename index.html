@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>UW-Madison Marathon Club</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Banner -->
+    <section id="topBanner">
+      <img src="sample.JPG" alt="UW-Madison Marathon Banner" class="banner" />
+    </section>
+
+    <!-- Navbar -->
+    <nav
+      class="navbar site-navbar is-spaced"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <strong class="has-text-white">UW-Madison Marathon</strong>
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="index.html">Home</a>
+          <a class="navbar-item" href="routes.html">Routes</a>
+          <a class="navbar-item" href="resources.html">Resources</a>
+          <a class="navbar-item" href="calendar.html">Calendar</a>
+          <a class="navbar-item" href="training.html">Training Plan</a>
+          <a class="navbar-item" href="leadership.html">Leadership</a>
+          <a class="navbar-item" href="about.html">About</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a id="profileBtn" class="button is-light">Profile</a>
+              <a id="signInBtn" class="button is-light">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+      <h1 class="title">Welcome to the UW-Madison Marathon Club</h1>
+      <p class="mb-4">
+        Join our community of runners! We train, race, and grow together as a
+        team.
+      </p>
+
+      <div class="box">
+        <h2 class="subtitle">Sign Up</h2>
+        <p>
+          Interested in joining? Fill out our
+          <a href="https://docs.google.com/forms/" target="_blank"
+            >Sign Up Form</a
+          >.
+        </p>
+      </div>
+    </main>
+
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Sign In</p>
+          <button id="signInClose" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">Username</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Enter username" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+              <input
+                class="input"
+                type="password"
+                placeholder="Enter password"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="checkbox">
+              <input type="checkbox" id="adminToggle" /> Sign in as admin
+            </label>
+          </div>
+          <div class="field is-hidden" id="adminCodeField">
+            <label class="label">Admin Code</label>
+            <div class="control">
+              <input
+                class="input"
+                type="password"
+                placeholder="Enter admin code"
+              />
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-primary">Sign In</button>
+        </footer>
+      </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 UW-Madison Marathon Club</p>
+    </footer>
+    <script src="main.js"></script>
+  </body>
+</html>
