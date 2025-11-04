@@ -58,6 +58,9 @@
               <a id="signOutBtn" class="button is-light signedIn is-hidden"
                 >Sign Out</a
               >
+              <a id="profileBtn" class="button is-light signedIn is-hidden"
+                >Profile</a
+              >
             </div>
           </div>
         </div>
@@ -198,6 +201,21 @@
         <!-- FORM END -->
       </div>
     </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Profile</p>
+          <button id="profileClose" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        </section>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer>
       <p>&copy; 2025 UW-Madison Marathon Club</p>

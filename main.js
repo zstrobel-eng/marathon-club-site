@@ -30,8 +30,10 @@ function configure_nav_bar(email) {
 auth.onAuthStateChanged((user) => {
   if (user) {
     configure_nav_bar(auth.currentUser.email);
+    r_e("userEmail").innerHTML = auth.currentUser.email;
   } else {
     configure_nav_bar();
+    r_e("userEmail").innerHTML = "";
   }
 });
 
@@ -100,6 +102,18 @@ r_e("signUpClose").addEventListener("click", () => {
   r_e("signUpModal").classList.remove("is-active");
 });
 
+//Profile Modal
+
+// Open modal
+r_e("profileBtn").addEventListener("click", () => {
+  r_e("profileModal").classList.add("is-active");
+});
+
+// Close modal
+r_e("profileClose").addEventListener("click", () => {
+  r_e("profileModal").classList.remove("is-active");
+});
+
 /* =========================
      Sign-In Modal
   ========================= */
@@ -143,5 +157,28 @@ routeLinks.forEach((link) => {
 modalCloses.forEach((close) => {
   close.addEventListener("click", () => {
     close.closest(".modal").classList.remove("is-active");
+  });
+});
+
+// Modal open/close
+document.querySelectorAll(".modal-trigger").forEach((trigger) => {
+  trigger.addEventListener("click", () => {
+    const target = trigger.getAttribute("data-target");
+    document.getElementById(target).classList.add("is-active");
+  });
+});
+document.querySelectorAll(".close-modal, .modal-background").forEach((el) => {
+  el.addEventListener("click", () => {
+    el.closest(".modal").classList.remove("is-active");
+  });
+});
+
+// Accordion toggle behavior
+document.querySelectorAll(".accordion-header").forEach((header) => {
+  header.addEventListener("click", () => {
+    const body = header.parentElement.querySelector(".accordion-body");
+    body.classList.toggle("is-hidden");
+    const icon = header.querySelector(".icon");
+    icon.textContent = body.classList.contains("is-hidden") ? "+" : "–";
   });
 });

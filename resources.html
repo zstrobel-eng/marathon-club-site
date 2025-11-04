@@ -53,13 +53,25 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a id="profileBtn" class="button is-light">Profile</a>
-              <a id="signInBtn" class="button is-light">Sign In</a>
+              <a id="signUpBtn" class="button is-light signedOut">Sign Up</a>
+              <a id="signInBtn" class="button is-light signedOut">Sign In</a>
+              <a id="signOutBtn" class="button is-light signedIn is-hidden"
+                >Sign Out</a
+              >
+              <a id="profileBtn" class="button is-light signedIn is-hidden"
+                >Profile</a
+              >
             </div>
           </div>
         </div>
       </div>
     </nav>
+
+    <!-- Message bar -->
+    <div
+      class="p-3 is-hidden has-text-centered text_white has-text-weight-bold"
+      id="messages"
+    ></div>
 
     <!-- Main Content -->
     <section class="section">
@@ -210,6 +222,53 @@
       </div>
     </section>
 
+    <!-- Sign Up Modal -->
+    <div id="signUpModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Sign Up</p>
+          <button id="signUpClose" class="delete" aria-label="close"></button>
+        </header>
+
+        <!-- FORM START -->
+        <form id="signUpForm" class="modal-card-body">
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input
+                id="signUpEmail"
+                name="email"
+                class="input"
+                type="email"
+                placeholder="Enter email"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+              <input
+                id="signUpPassword"
+                name="password"
+                class="input"
+                type="password"
+                placeholder="Enter password"
+                required
+              />
+            </div>
+          </div>
+          <p id="signupMessage" class="has-text-success"></p>
+
+          <footer class="modal-card-foot">
+            <button type="submit" class="button is-primary">Sign Up</button>
+          </footer>
+        </form>
+        <!-- FORM END -->
+      </div>
+    </div>
+
     <!-- Sign In Modal -->
     <div id="signInModal" class="modal">
       <div class="modal-background"></div>
@@ -218,42 +277,75 @@
           <p class="modal-card-title">Sign In</p>
           <button id="signInClose" class="delete" aria-label="close"></button>
         </header>
-        <section class="modal-card-body">
+
+        <!-- FORM START -->
+        <form id="signInForm" class="modal-card-body">
           <div class="field">
-            <label class="label">Username</label>
+            <label class="label">Email</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Enter username" />
+              <input
+                id="signInEmail"
+                name="email"
+                class="input"
+                type="email"
+                placeholder="Enter email"
+                required
+              />
             </div>
           </div>
+
           <div class="field">
             <label class="label">Password</label>
             <div class="control">
               <input
+                id="signInPassword"
+                name="password"
                 class="input"
                 type="password"
                 placeholder="Enter password"
+                required
               />
             </div>
           </div>
+
           <div class="field">
             <label class="checkbox">
               <input type="checkbox" id="adminToggle" /> Sign in as admin
             </label>
           </div>
+
           <div class="field is-hidden" id="adminCodeField">
             <label class="label">Admin Code</label>
             <div class="control">
               <input
+                id="adminCodeInput"
+                name="adminCode"
                 class="input"
                 type="password"
                 placeholder="Enter admin code"
               />
             </div>
           </div>
+
+          <footer class="modal-card-foot">
+            <button type="submit" class="button is-primary">Sign In</button>
+          </footer>
+        </form>
+        <!-- FORM END -->
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Profile</p>
+          <button id="profileClose" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p><strong>Email:</strong> <span id="userEmail"></span></p>
         </section>
-        <footer class="modal-card-foot">
-          <button class="button is-primary">Sign In</button>
-        </footer>
       </div>
     </div>
 
@@ -262,17 +354,24 @@
       <p>&copy; 2025 UW-Madison Marathon Club</p>
     </footer>
 
-    <script src="main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <script>
-      // Accordion toggle behavior
-      document.querySelectorAll(".accordion-header").forEach((header) => {
-        header.addEventListener("click", () => {
-          const body = header.parentElement.querySelector(".accordion-body");
-          body.classList.toggle("is-hidden");
-          const icon = header.querySelector(".icon");
-          icon.textContent = body.classList.contains("is-hidden") ? "+" : "–";
-        });
-      });
+      const firebaseConfig = {
+        apiKey: "AIzaSyC6_OQcfiwzqdG2FDsDXqPJX3gVS8CxyuM",
+        authDomain: "marathon-club-site.firebaseapp.com",
+        projectId: "marathon-club-site",
+        storageBucket: "marathon-club-site.firebasestorage.app",
+        messagingSenderId: "229365451201",
+        appId: "1:229365451201:web:56b402e5003d5eae024740",
+        measurementId: "G-X04J6TBSXY",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
     </script>
+
+    <script src="main.js"></script>
   </body>
 </html>
