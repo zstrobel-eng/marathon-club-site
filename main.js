@@ -13,13 +13,6 @@ function configure_messages_bar(msg) {
   }, 3000);
 }
 
-// Get elements
-const signInButton = document.getElementById("signInBtn");
-const signInModal = document.getElementById("signInModal");
-const signInClose = document.getElementById("signInClose");
-const adminToggle = document.getElementById("adminToggle");
-const adminCodeField = document.getElementById("adminCodeField");
-
 // navbar button configuration
 function configure_nav_bar(email) {
   let signedin = document.querySelectorAll(".signedIn");
@@ -45,8 +38,8 @@ auth.onAuthStateChanged((user) => {
 // Sign-up
 r_e("signUpForm").addEventListener("submit", (e) => {
   e.preventDefault();
-  let email = r_e("userEmail").value;
-  let password = r_e("userPassword").value;
+  let email = r_e("signUpEmail").value;
+  let password = r_e("signUpPassword").value;
   auth.createUserWithEmailAndPassword(email, password).then(() => {
     r_e("signUpModal").classList.remove("is-active");
     r_e("signUpForm").reset();
@@ -54,20 +47,17 @@ r_e("signUpForm").addEventListener("submit", (e) => {
   });
 });
 
-// // Log-in
-// document.getElementById("login").addEventListener("submit", (e) => {
-//   const email = document.getElementById("email").value;
-//   const password = document.getElementById("password").value;
-
-//   auth
-//     .signInWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//       document.getElementById("message").innerText = "✅ Logged in!";
-//     })
-//     .catch((error) => {
-//       document.getElementById("message").innerText = "Error: " + error.message;
-//     });
-// });
+// sign in user
+r_e("signInForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  let email = r_e("signInEmail").value;
+  let password = r_e("signInPassword").value;
+  auth.signInWithEmailAndPassword(email, password).then(() => {
+    configure_messages_bar(`Welcome back ${auth.currentUser.email}!`);
+    r_e("signInModal").classList.remove("is-active");
+    r_e("signInForm").reset();
+  });
+});
 
 // sign out user
 r_e(`signOutBtn`).addEventListener("click", () => {
@@ -102,32 +92,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Open modal
 r_e("signUpBtn").addEventListener("click", () => {
-  signUpModal.classList.add("is-active");
+  r_e("signUpModal").classList.add("is-active");
 });
 
 // Close modal
 r_e("signUpClose").addEventListener("click", () => {
-  signUpModal.classList.remove("is-active");
+  r_e("signUpModal").classList.remove("is-active");
 });
 
 /* =========================
      Sign-In Modal
   ========================= */
 
-if (signInButton) {
-  signInButton.addEventListener("click", () => {
+if (r_e("signInBtn")) {
+  r_e("signInBtn").addEventListener("click", () => {
     signInModal.classList.add("is-active");
   });
 }
 
-if (signInClose) {
-  signInClose.addEventListener("click", () => {
+if (r_e("signInClose")) {
+  r_e("signInClose").addEventListener("click", () => {
     signInModal.classList.remove("is-active");
   });
 }
 
-if (adminToggle) {
-  adminToggle.addEventListener("click", () => {
+if (r_e("adminToggle")) {
+  r_e("adminToggle").addEventListener("click", () => {
     adminCodeField.classList.toggle("is-hidden");
   });
 }
