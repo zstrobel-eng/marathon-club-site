@@ -1,3 +1,73 @@
+// functions
+function r_e(id) {
+  return document.querySelector(`#${id}`);
+}
+
+// message bar
+function configure_messages_bar(msg) {
+  r_e("messages").classList.remove("is-hidden");
+  r_e("messages").innerHTML = msg;
+  setTimeout(() => {
+    r_e("messages").classList.add("is-hidden");
+    r_e("messages").innerHTML = "";
+  }, 3000);
+}
+
+// navbar button configuration
+function configure_nav_bar(email) {
+  let signedin = document.querySelectorAll(".signedIn");
+  let signedout = document.querySelectorAll(".signedOut");
+  if (email) {
+    signedin.forEach((e) => e.classList.remove("is-hidden"));
+    signedout.forEach((e) => e.classList.add("is-hidden"));
+  } else {
+    signedout.forEach((e) => e.classList.remove("is-hidden"));
+    signedin.forEach((e) => e.classList.add("is-hidden"));
+  }
+}
+
+// update navbar
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    configure_nav_bar(auth.currentUser.email);
+    r_e("userEmail").innerHTML = auth.currentUser.email;
+  } else {
+    configure_nav_bar();
+    r_e("userEmail").innerHTML = "";
+  }
+});
+
+// Sign-up
+r_e("signUpForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  let email = r_e("signUpEmail").value;
+  let password = r_e("signUpPassword").value;
+  auth.createUserWithEmailAndPassword(email, password).then(() => {
+    r_e("signUpModal").classList.remove("is-active");
+    r_e("signUpForm").reset();
+    configure_messages_bar(`Welcome ${auth.currentUser.email}!`);
+  });
+});
+
+// sign in user
+r_e("signInForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  let email = r_e("signInEmail").value;
+  let password = r_e("signInPassword").value;
+  auth.signInWithEmailAndPassword(email, password).then(() => {
+    configure_messages_bar(`Welcome back ${auth.currentUser.email}!`);
+    r_e("signInModal").classList.remove("is-active");
+    r_e("signInForm").reset();
+  });
+});
+
+// sign out user
+r_e(`signOutBtn`).addEventListener("click", () => {
+  auth.signOut().then(() => {
+    configure_messages_bar(`Goodbye!`);
+  });
+});
+
 /* =========================
    Navbar Burger (Mobile)
 ========================= */
@@ -20,29 +90,48 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Sign-Up Modal
+
+// Open modal
+r_e("signUpBtn").addEventListener("click", () => {
+  r_e("signUpModal").classList.add("is-active");
+});
+
+// Close modal
+r_e("signUpClose").addEventListener("click", () => {
+  r_e("signUpModal").classList.remove("is-active");
+});
+
+//Profile Modal
+
+// Open modal
+r_e("profileBtn").addEventListener("click", () => {
+  r_e("profileModal").classList.add("is-active");
+});
+
+// Close modal
+r_e("profileClose").addEventListener("click", () => {
+  r_e("profileModal").classList.remove("is-active");
+});
+
 /* =========================
      Sign-In Modal
   ========================= */
-const signInButton = document.getElementById("signInBtn");
-const signInModal = document.getElementById("signInModal");
-const signInClose = document.getElementById("signInClose");
-const adminToggle = document.getElementById("adminToggle");
-const adminCodeField = document.getElementById("adminCodeField");
 
-if (signInButton) {
-  signInButton.addEventListener("click", () => {
+if (r_e("signInBtn")) {
+  r_e("signInBtn").addEventListener("click", () => {
     signInModal.classList.add("is-active");
   });
 }
 
-if (signInClose) {
-  signInClose.addEventListener("click", () => {
+if (r_e("signInClose")) {
+  r_e("signInClose").addEventListener("click", () => {
     signInModal.classList.remove("is-active");
   });
 }
 
-if (adminToggle) {
-  adminToggle.addEventListener("click", () => {
+if (r_e("adminToggle")) {
+  r_e("adminToggle").addEventListener("click", () => {
     adminCodeField.classList.toggle("is-hidden");
   });
 }
@@ -68,5 +157,28 @@ routeLinks.forEach((link) => {
 modalCloses.forEach((close) => {
   close.addEventListener("click", () => {
     close.closest(".modal").classList.remove("is-active");
+  });
+});
+
+// Modal open/close
+document.querySelectorAll(".modal-trigger").forEach((trigger) => {
+  trigger.addEventListener("click", () => {
+    const target = trigger.getAttribute("data-target");
+    document.getElementById(target).classList.add("is-active");
+  });
+});
+document.querySelectorAll(".close-modal, .modal-background").forEach((el) => {
+  el.addEventListener("click", () => {
+    el.closest(".modal").classList.remove("is-active");
+  });
+});
+
+// Accordion toggle behavior
+document.querySelectorAll(".accordion-header").forEach((header) => {
+  header.addEventListener("click", () => {
+    const body = header.parentElement.querySelector(".accordion-body");
+    body.classList.toggle("is-hidden");
+    const icon = header.querySelector(".icon");
+    icon.textContent = body.classList.contains("is-hidden") ? "+" : "–";
   });
 });
