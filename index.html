@@ -170,6 +170,18 @@
         <!-- FORM START -->
         <form id="signUpForm" class="modal-card-body">
           <div class="field">
+            <label class="label">Full Name</label>
+            <div class="control">
+              <input
+                id="userName"
+                class="input"
+                type="text"
+                placeholder="Enter First and Last Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
             <label class="label">Email</label>
             <div class="control">
               <input
@@ -280,6 +292,7 @@
           <button id="profileClose" class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
+          <p><strong>Name:</strong> <span id="profileName"></span></p>
           <p><strong>Email:</strong> <span id="userEmail"></span></p>
         </section>
       </div>
@@ -292,6 +305,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
     <script>
       const firebaseConfig = {
@@ -306,6 +322,7 @@
 
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
+      let db = firebase.firestore();
     </script>
 
     <script src="main.js"></script>
