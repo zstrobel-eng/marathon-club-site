@@ -29,10 +29,24 @@ function configure_nav_bar(email) {
 // update navbar
 auth.onAuthStateChanged((user) => {
   if (user) {
-    const email = auth.currentUser.email;
+    const current_email = auth.currentUser.email;
     configure_nav_bar(auth.currentUser.email);
     r_e("userEmail").innerHTML = auth.currentUser.email;
-    r_e("profileName").innerHTML = user_profile.email.user_name;
+    db.collection("user_profile")
+      .where("user_email", "==", current_email)
+      .get()
+      .then((mydata) => {
+        let mydocs = mydata.docs;
+        console.log(mydocs);
+
+        // loop through the mydocs array
+        let html = "";
+        mydocs.forEach((doc) => {
+          html = `${doc.data().user_name}`;
+        });
+        console.log(html);
+        r_e("profileName").innerHTML = html;
+      });
     r_e("rsvp1").classList.remove("is-hidden");
   } else {
     configure_nav_bar();
@@ -55,15 +69,19 @@ r_e("signUpForm").addEventListener("submit", (e) => {
   auth.createUserWithEmailAndPassword(email, password).then(() => {
     r_e("signUpModal").classList.remove("is-active");
     r_e("signUpForm").reset();
-    configure_messages_bar(`Welcome ${auth.currentUser.email}!`);
+    db.collection("user_profile")
+      .where("user_email", "==", email)
+      .get()
+      .then((mydata) => {
+        let mydocs = mydata.docs;
+        console.log(mydocs);
+
+        mydocs.forEach((doc) => {
+          name = `${doc.data().user_name}`;
+        });
+        configure_messages_bar(`Welcome ${name}!`);
+      });
   });
-  console.log(user);
-  db.collection("user_profile")
-    .doc(email)
-    .set(user)
-    .then(() => {
-      console.log("John added");
-    });
 });
 
 // sign in user
@@ -72,7 +90,18 @@ r_e("signInForm").addEventListener("submit", (e) => {
   let email = r_e("signInEmail").value;
   let password = r_e("signInPassword").value;
   auth.signInWithEmailAndPassword(email, password).then(() => {
-    configure_messages_bar(`Welcome back ${auth.currentUser.email}!`);
+    db.collection("user_profile")
+      .where("user_email", "==", email)
+      .get()
+      .then((mydata) => {
+        let mydocs = mydata.docs;
+        console.log(mydocs);
+
+        mydocs.forEach((doc) => {
+          name2 = `${doc.data().user_name}`;
+        });
+        configure_messages_bar(`Welcome back ${name2}!`);
+      });
     r_e("signInModal").classList.remove("is-active");
     r_e("signInForm").reset();
   });
@@ -173,7 +202,6 @@ if (r_e("rsvpYes")) {
   r_e("rsvpYes").addEventListener("click", () => {
     let rsvp_status = true;
     let user_email = auth.currentUser.email;
-    let user_name = auth.currentUser.displayName || "Anonymous";
     db.collection("rsvp").add;
     // r_e("attending").innerHTML += `<p>${auth.currentUser.email}</p>`;
     r_e("rsvpModal").classList.remove("is-active");
