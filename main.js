@@ -82,6 +82,12 @@ r_e("signUpForm").addEventListener("submit", (e) => {
         configure_messages_bar(`Welcome ${name}!`);
       });
   });
+  db.collection("user_profile")
+    .doc(email)
+    .set(user)
+    .then(() => {
+      console.log("John added");
+    });
 });
 
 // sign in user
