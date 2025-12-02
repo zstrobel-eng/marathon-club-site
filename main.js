@@ -29,11 +29,16 @@ function configure_nav_bar(email) {
 // update navbar
 auth.onAuthStateChanged((user) => {
   if (user) {
+    const email = auth.currentUser.email;
     configure_nav_bar(auth.currentUser.email);
     r_e("userEmail").innerHTML = auth.currentUser.email;
+    r_e("profileName").innerHTML = user_profile.email.user_name;
+    r_e("rsvp1").classList.remove("is-hidden");
   } else {
     configure_nav_bar();
     r_e("userEmail").innerHTML = "";
+    r_e("profileName").innerHTML = "";
+    r_e("rsvp1").classList.add("is-hidden");
   }
 });
 
@@ -42,11 +47,23 @@ r_e("signUpForm").addEventListener("submit", (e) => {
   e.preventDefault();
   let email = r_e("signUpEmail").value;
   let password = r_e("signUpPassword").value;
+  let name = r_e("userName").value;
+  let user = {
+    user_email: email,
+    user_name: name,
+  };
   auth.createUserWithEmailAndPassword(email, password).then(() => {
     r_e("signUpModal").classList.remove("is-active");
     r_e("signUpForm").reset();
     configure_messages_bar(`Welcome ${auth.currentUser.email}!`);
   });
+  console.log(user);
+  db.collection("user_profile")
+    .doc(email)
+    .set(user)
+    .then(() => {
+      console.log("John added");
+    });
 });
 
 // sign in user
@@ -133,6 +150,58 @@ if (r_e("signInClose")) {
 if (r_e("adminToggle")) {
   r_e("adminToggle").addEventListener("click", () => {
     adminCodeField.classList.toggle("is-hidden");
+  });
+}
+
+/* =========================
+     RSVP Modal
+  ========================= */
+
+if (r_e("rsvp1")) {
+  r_e("rsvp1").addEventListener("click", () => {
+    r_e("rsvpModal").classList.add("is-active");
+  });
+}
+
+if (r_e("rsvpClose")) {
+  r_e("rsvpClose").addEventListener("click", () => {
+    r_e("rsvpModal").classList.remove("is-active");
+  });
+}
+
+if (r_e("rsvpYes")) {
+  r_e("rsvpYes").addEventListener("click", () => {
+    let rsvp_status = true;
+    let user_email = auth.currentUser.email;
+    let user_name = auth.currentUser.displayName || "Anonymous";
+    db.collection("rsvp").add;
+    // r_e("attending").innerHTML += `<p>${auth.currentUser.email}</p>`;
+    r_e("rsvpModal").classList.remove("is-active");
+    r_e("rsvp1").classList.add("is-hidden");
+  });
+}
+
+if (r_e("rsvpNo")) {
+  r_e("rsvpNo").addEventListener("click", () => {
+    // r_e("not_attending").innerHTML += `<p>${auth.currentUser.email}</p>`;
+    r_e("rsvpModal").classList.remove("is-active");
+    r_e("rsvp1").classList.add("is-hidden");
+  });
+}
+
+/* =========================
+     Attendees Modal
+  ========================= */
+
+if (r_e("attend1")) {
+  r_e("attend1").addEventListener("click", () => {
+    r_e("attendModal").classList.add("is-active");
+  });
+}
+
+if (r_e("attendClose")) {
+  r_e("attendClose").addEventListener("click", () => {
+    r_e("attendModal").classList.remove("is-active");
   });
 }
 

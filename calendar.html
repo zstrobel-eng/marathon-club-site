@@ -86,7 +86,8 @@
           <p>
             Meet at Memorial Union, 8:00 AM. 10-mile loop around Lake Monona.
           </p>
-          <button class="button is-link">RSVP</button>
+          <button id="rsvp1" class="button is-link is-hidden">RSVP</button>
+          <button id="attend1" class="button is-link">Attendees</button>
         </div>
 
         <div class="box">
@@ -95,7 +96,8 @@
             Meet at Camp Randall, 6:00 PM. 6 miles total with 3 miles at tempo
             pace.
           </p>
-          <button class="button is-link">RSVP</button>
+          <button id="rsvp2" class="button is-link">RSVP</button>
+          <button id="attend2" class="button is-link">Attendees</button>
         </div>
       </div>
     </section>
@@ -111,6 +113,18 @@
 
         <!-- FORM START -->
         <form id="signUpForm" class="modal-card-body">
+          <div class="field">
+            <label class="label">Full Name</label>
+            <div class="control">
+              <input
+                id="userName"
+                class="input"
+                type="text"
+                placeholder="Enter First and Last Name"
+                required
+              />
+            </div>
+          </div>
           <div class="field">
             <label class="label">Email</label>
             <div class="control">
@@ -222,7 +236,50 @@
           <button id="profileClose" class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
+          <p><strong>Name:</strong> <span id="profileName"></span></p>
           <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        </section>
+      </div>
+    </div>
+
+    <!-- RSVP Modal -->
+    <div id="rsvpModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Would you like to RSVP?</p>
+          <button id="rsvpClose" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>
+            <button id="rsvpYes" class="button is-link" type="button">
+              Yes
+            </button>
+            <button id="rsvpNo" class="button is-link" type="button">No</button>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Attendees Modal -->
+    <div id="attendModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Current Responses</p>
+          <button id="attendClose" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="columns">
+            <div id="attending" class="column">
+              <h1>Will Be Attending</h1>
+              <p></p>
+            </div>
+            <div id="not_attending" class="column">
+              <h1>Will Not Be Attending</h1>
+              <p></p>
+            </div>
+          </div>
         </section>
       </div>
     </div>
@@ -231,6 +288,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
     <script>
       const firebaseConfig = {
@@ -245,6 +305,7 @@
 
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
+      let db = firebase.firestore();
     </script>
 
     <script src="main.js"></script>
