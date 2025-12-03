@@ -112,11 +112,36 @@
                 <p class="card-header-title">Routes</p>
               </header>
               <div class="card-content">
-                <p><strong>Routes Uploaded:</strong> 12</p>
-                <ul>
-                  <li>Lake Mendota 5K</li>
-                  <li>Arboretum 10K</li>
-                </ul>
+                <h2 class="pb-2 is-6">
+                  <strong>Add New Routes to the Website:</strong>
+                </h2>
+                <p>
+                  To add a new route, click the "Add Route" button below and
+                  fill out the route details in the form.
+                </p>
+                <p class="pt-2">
+                  <strong>Note: </strong>The Strava embed information can only
+                  be found on the Strava web page for public activities or
+                  routes posted to Strava. Useually the embed link is found by
+                  clicking the "Share" button on a Strava route or activity and
+                  selecting "Embed".
+                </p>
+                <p class="pt-2">Embedded Strava links will look like this:</p>
+                <p>
+                  &lt;div class=&quot;strava-embed-placeholder&quot;
+                  data-embed-type=&quot;activity&quot;
+                  data-embed-id=&quot;123456789&quot;
+                  data-style=&quot;standard&quot;
+                  data-from-embed=&quot;false&quot;&gt;&lt;/div&gt;&lt;script
+                  src=&quot;https://strava-embeds.com/embed.js&quot;&gt;&lt;/script&gt;
+                </p>
+                <h2 class="pb-2 pt-4 is-6">
+                  <strong>Manage Current Routes on the Website:</strong>
+                </h2>
+                <p>
+                  Use the "Manage Routes" button below to edit or delete
+                  existing routes listed on the website.
+                </p>
               </div>
               <footer class="card-footer">
                 <a
@@ -339,13 +364,33 @@
         <section class="modal-card-body">
           <div class="field">
             <label class="label">Route Name</label>
-            <input class="input" type="text" placeholder="Enter route name" />
+            <input
+              id="route_title"
+              class="input"
+              type="text"
+              placeholder="Enter route name"
+            />
           </div>
           <div class="field">
             <label class="label">Strava Embed Link</label>
-            <input class="input" type="text" placeholder="Paste Strava link" />
+            <input
+              id="strava_info"
+              class="input"
+              type="text"
+              placeholder="Paste Strava link"
+            />
+          </div>
+          <div class="field">
+            <label class="label">Distance</label>
+            <input
+              id="route_distance"
+              class="input"
+              type="text"
+              placeholder="Enter distance"
+            />
           </div>
         </section>
+
         <footer class="modal-card-foot">
           <button class="button is-primary">Save Route</button>
         </footer>
