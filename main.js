@@ -867,6 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (doc.exists) await adminRef.delete();
       }
 
+      await loadAllUsers();
       configure_messages_bar("User updated.");
       // refresh suggestions and re-select to refresh UI
       await refreshSuggestionsAndSelection();
@@ -893,7 +894,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const adminRef = db.collection("admins").doc(selectedUserEmail);
       const adminDoc = await adminRef.get();
       if (adminDoc.exists) await adminRef.delete();
-
+      await loadAllUsers();
       configure_messages_bar("User removed (Firestore).");
 
       // Clear selection and refresh
@@ -938,7 +939,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (makeAdmin) {
         await db.collection("admins").doc(email).set({ is_admin: true });
       }
-
+      await loadAllUsers();
       // Clear fields
       newNameInput.value = "";
       newEmailInput.value = "";
