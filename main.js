@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Sign-Up Modal
+// // Sign-Up Modal
 
 // Open modal
 if (r_e("signUpBtn")) {
@@ -205,6 +205,47 @@ if (r_e("adminToggle")) {
     adminCodeField.classList.toggle("is-hidden");
   });
 }
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   // Sign-Up Modal
+//   if (r_e("signUpBtn") && r_e("signUpModal")) {
+//     r_e("signUpBtn").addEventListener("click", () => {
+//       r_e("signUpModal").classList.add("is-active");
+//     });
+//   }
+
+//   if (r_e("signUpClose") && r_e("signUpModal")) {
+//     r_e("signUpClose").addEventListener("click", () => {
+//       r_e("signUpModal").classList.remove("is-active");
+//     });
+//   }
+
+//   // Sign-In Modal
+//   if (r_e("signInBtn") && r_e("signInModal")) {
+//     r_e("signInBtn").addEventListener("click", () => {
+//       r_e("signInModal").classList.add("is-active");
+//     });
+//   }
+
+//   if (r_e("signInClose") && r_e("signInModal")) {
+//     r_e("signInClose").addEventListener("click", () => {
+//       r_e("signInModal").classList.remove("is-active");
+//     });
+//   }
+
+//   // Profile Modal (if needed)
+//   if (r_e("profileBtn") && r_e("profileModal")) {
+//     r_e("profileBtn").addEventListener("click", () => {
+//       r_e("profileModal").classList.add("is-active");
+//     });
+//   }
+
+//   if (r_e("profileClose") && r_e("profileModal")) {
+//     r_e("profileClose").addEventListener("click", () => {
+//       r_e("profileModal").classList.remove("is-active");
+//     });
+//   }
+// });
 
 /* =========================
      RSVP Modal
