@@ -10,6 +10,7 @@
     />
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <!-- Banner -->
     <section id="topBanner">
@@ -17,11 +18,7 @@
     </section>
 
     <!-- Navbar -->
-    <nav
-      class="navbar site-navbar is-spaced"
-      role="navigation"
-      aria-label="main navigation"
-    >
+    <nav class="navbar site-navbar is-spaced" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="index.html">
           <strong class="has-text-white">UW-Madison Marathon</strong>
@@ -44,7 +41,7 @@
           <a class="navbar-item" href="index.html">Home</a>
           <a class="navbar-item" href="routes.html">Routes</a>
           <a class="navbar-item" href="resources.html">Resources</a>
-          <a class="navbar-item is-hidden" href="calendar.html">Calendar</a>
+          <a class="navbar-item" href="calendar.html">Calendar</a>
           <a class="navbar-item" href="training.html">Training Plan</a>
           <a class="navbar-item" href="leadership.html">Leadership</a>
           <a class="navbar-item" href="about.html">About</a>
@@ -82,429 +79,34 @@
           view details.
         </p>
 
-        <!-- 2-4 Miles -->
+        <!-- DISTANCE GROUPS -->
         <h2 class="title is-4">2–4 Miles</h2>
-        <ul>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal1"
-              >State-Langdon—2 Mile Loop</a
-            >
-          </li>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal2"
-              >Lakeshore Path—3 Mile OAB</a
-            >
-          </li>
-        </ul>
+        <ul id="group-2-4"></ul>
 
-        <!-- 4-6 Miles -->
         <h2 class="title is-4 pt-6">4–6 Miles</h2>
-        <ul>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal3"
-              >Lakeshore Path—4.5 Mile Loop</a
-            >
-          </li>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal4"
-              >Picnic Point—5.5 Mile OAB</a
-            >
-          </li>
-        </ul>
+        <ul id="group-4-6"></ul>
 
-        <!-- 6-10 Miles -->
         <h2 class="title is-4 pt-6">6–10 Miles</h2>
-        <ul>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal5"
-              >Picnic Point—7 Mile Loop</a
-            >
-          </li>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal6"
-              >Arboretum—9.5 Mile Loop</a
-            >
-          </li>
-        </ul>
+        <ul id="group-6-10"></ul>
 
-        <!-- 10-15 Miles -->
         <h2 class="title is-4 pt-6">10–15 Miles</h2>
-        <ul>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal7"
-              >Picnic Point—12.5 Mile Loop</a
-            >
-          </li>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal8"
-              >Lake Monona—15 Mile Loop</a
-            >
-          </li>
-        </ul>
+        <ul id="group-10-15"></ul>
 
-        <!-- 15-20 Miles -->
         <h2 class="title is-4 pt-6">15–20 Miles</h2>
-        <ul>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal9"
-              >Picnic Point + Arboretum—18.5 Mile Loop</a
-            >
-          </li>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal10"
-              >Capital City—19.5 Mile Loop</a
-            >
-          </li>
-        </ul>
+        <ul id="group-15-20"></ul>
 
-        <!-- 20-28 Miles -->
         <h2 class="title is-4 pt-6">20–28 Miles</h2>
-        <ul>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal11"
-              >Arboretum + Lake Monona—23.5 Mile Loop</a
-            >
-          </li>
-          <li>
-            <a href="#" class="route-link" data-target="routeModal12"
-              >Lake Mendota—25 Mile Loop</a
-            >
-          </li>
-        </ul>
+        <ul id="group-20-28"></ul>
+
+        <!-- DYNAMIC MODAL CONTAINER -->
+        <div id="modalContainer"></div>
       </div>
     </section>
 
-    <!-- Route Modals -->
-    <!-- Replace iframe src with real Strava embed links -->
-    <div id="routeModal1" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419787207930552770"
-          data-style="standard"
-          data-map-hash="14.44/43.07685/-89.39252"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal2" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419765101371687766"
-          data-style="standard"
-          data-map-hash="13.62/43.07848/-89.41255"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal3" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419763294200665438"
-          data-style="standard"
-          data-map-hash="13.07/43.08076/-89.41846"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal4" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419772221188289198"
-          data-style="standard"
-          data-from-embed="false"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal5" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419787207935420866"
-          data-style="standard"
-          data-map-hash="12.92/43.08431/-89.41846"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal6" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3408286920208265438"
-          data-style="standard"
-          data-map-hash="11.59/43.0574/-89.4213"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal7" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419783804748734814"
-          data-style="standard"
-          data-map-hash="11.98/43.08347/-89.43971"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal8" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3408685767358839292"
-          data-style="standard"
-          data-map-hash="11.29/43.0678/-89.3619"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal9" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419835724235126564"
-          data-style="standard"
-          data-from-embed="false"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal10" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3418725872354632414"
-          data-style="standard"
-          data-map-hash="10.79/43.0433/-89.4032"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal11" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3408686612983771458"
-          data-style="standard"
-          data-map-hash="11.12/43.0648/-89.3838"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <div id="routeModal12" class="modal route-modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div
-          class="strava-embed-placeholder"
-          data-embed-type="route"
-          data-embed-id="3419834158905972344"
-          data-style="standard"
-          data-map-hash="10.57/43.1142/-89.4355"
-          data-from-embed="true"
-        ></div>
-        <script src="https://strava-embeds.com/embed.js"></script>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
-    <!-- Sign Up Modal -->
-    <div id="signUpModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Sign Up</p>
-          <button id="signUpClose" class="delete" aria-label="close"></button>
-        </header>
-
-        <!-- FORM START -->
-        <form id="signUpForm" class="modal-card-body">
-          <div class="field">
-            <label class="label">Full Name</label>
-            <div class="control">
-              <input
-                id="userName"
-                class="input"
-                type="text"
-                placeholder="Enter First and Last Name"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Email</label>
-            <div class="control">
-              <input
-                id="signUpEmail"
-                name="email"
-                class="input"
-                type="email"
-                placeholder="Enter email"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-              <input
-                id="signUpPassword"
-                name="password"
-                class="input"
-                type="password"
-                placeholder="Enter password"
-                required
-              />
-            </div>
-          </div>
-          <p id="signupMessage" class="has-text-success"></p>
-
-          <footer class="modal-card-foot">
-            <button type="submit" class="button is-primary">Sign Up</button>
-          </footer>
-        </form>
-        <!-- FORM END -->
-      </div>
-    </div>
-
-    <!-- Sign In Modal -->
-    <div id="signInModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Sign In</p>
-          <button id="signInClose" class="delete" aria-label="close"></button>
-        </header>
-
-        <!-- FORM START -->
-        <form id="signInForm" class="modal-card-body">
-          <div class="field">
-            <label class="label">Email</label>
-            <div class="control">
-              <input
-                id="signInEmail"
-                name="email"
-                class="input"
-                type="email"
-                placeholder="Enter email"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-              <input
-                id="signInPassword"
-                name="password"
-                class="input"
-                type="password"
-                placeholder="Enter password"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="checkbox">
-              <input type="checkbox" id="adminToggle" /> Sign in as admin
-            </label>
-          </div>
-
-          <div class="field is-hidden" id="adminCodeField">
-            <label class="label">Admin Code</label>
-            <div class="control">
-              <input
-                id="adminCodeInput"
-                name="adminCode"
-                class="input"
-                type="password"
-                placeholder="Enter admin code"
-              />
-            </div>
-          </div>
-
-          <footer class="modal-card-foot">
-            <button type="submit" class="button is-primary">Sign In</button>
-          </footer>
-        </form>
-        <!-- FORM END -->
-      </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Profile</p>
-          <button id="profileClose" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <p><strong>Name:</strong> <span id="profileName"></span></p>
-          <p><strong>Email:</strong> <span id="userEmail"></span></p>
-        </section>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-      <p>&copy; 2025 UW-Madison Marathon Club</p>
-    </footer>
-
+    <!-- Firebase v8 (your site uses this version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
     <script>
       const firebaseConfig = {
@@ -519,7 +121,7 @@
 
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
-      let db = firebase.firestore();
+      const db = firebase.firestore();
     </script>
 
     <script src="main.js"></script>
