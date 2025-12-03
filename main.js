@@ -694,3 +694,353 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ******************** ADMIN USER MANAGEMENT ******************
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!window.location.pathname.includes("admin.html")) return;
+
+  // Elements
+  const searchInput = document.getElementById("userSearch");
+  const suggestionsBox = document.getElementById("userSuggestions");
+  const editSection = document.getElementById("editUserSection");
+  const editNameInput = document.getElementById("editUserName");
+  const editEmailInput = document.getElementById("editUserEmail"); // read-only in UI
+  const editIsAdminCheckbox = document.getElementById("editIsAdmin");
+  const saveUserBtn = document.getElementById("saveUserChanges");
+  const deleteUserBtn = document.getElementById("deleteUser");
+
+  const newNameInput = document.getElementById("newUserName");
+  const newEmailInput = document.getElementById("newUserEmail");
+  const newPasswordInput = document.getElementById("newUserPassword");
+  const newIsAdminCheckbox = document.getElementById("newIsAdmin");
+  const createNewUserBtn = document.getElementById("createNewUser");
+
+  if (!searchInput || !suggestionsBox || !editSection) {
+    console.warn("Admin user management: missing required DOM elements.");
+    return;
+  }
+
+  // State
+  let suggestionResults = []; // array of { id: email, ...data }
+  let selectedUserEmail = null;
+
+  // Debounce helper
+  function debounce(fn, wait = 250) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  // Fetch suggestions by searching both user_email and user_name.
+  // Uses prefix queries. We perform two queries and merge results (dedupe by doc ID).
+  async function fetchUserSuggestions(queryText) {
+    if (!queryText || queryText.trim().length === 0) return [];
+
+    const q = queryText.trim().toLowerCase();
+
+    const resultsMap = new Map();
+
+    try {
+      // Search by user_email prefix
+      const emailSnap = await db
+        .collection("user_profile")
+        .orderBy("user_email")
+        .startAt(q)
+        .endAt(q + "\uf8ff")
+        .limit(20)
+        .get();
+
+      emailSnap.forEach((doc) => {
+        resultsMap.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+    } catch (e) {
+      // ignore partial failures
+      console.warn("Email prefix query failed (might be case-sensitive)", e);
+    }
+
+    try {
+      // Search by user_name prefix
+      const nameSnap = await db
+        .collection("user_profile")
+        .orderBy("user_name")
+        .startAt(q)
+        .endAt(q + "\uf8ff")
+        .limit(20)
+        .get();
+
+      nameSnap.forEach((doc) => {
+        resultsMap.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+    } catch (e) {
+      console.warn("Name prefix query failed (might be case-sensitive)", e);
+    }
+
+    // Convert to array and sort by user_name (fallback to email)
+    const arr = Array.from(resultsMap.values()).sort((a, b) => {
+      const an = (a.user_name || "").toLowerCase();
+      const bn = (b.user_name || "").toLowerCase();
+      if (an < bn) return -1;
+      if (an > bn) return 1;
+      return (a.user_email || "").localeCompare(b.user_email || "");
+    });
+
+    return arr;
+  }
+
+  // Load full user data by email (doc ID)
+  async function loadUserByEmail(email) {
+    if (!email) return null;
+    const doc = await db.collection("user_profile").doc(email).get();
+    if (!doc.exists) return null;
+    return { id: doc.id, ...doc.data() };
+  }
+
+  // Check admin status by admins/{email}
+  async function getAdminStatus(email) {
+    const doc = await db.collection("admins").doc(email).get();
+    return doc.exists;
+  }
+
+  function renderSuggestions(items) {
+    suggestionsBox.innerHTML = "";
+    if (!items || items.length === 0) {
+      suggestionsBox.innerHTML = `<p class="has-text-grey">No matching users</p>`;
+      return;
+    }
+
+    const ul = document.createElement("ul");
+    ul.style.listStyle = "none";
+    ul.style.padding = "0";
+    ul.style.margin = "0";
+
+    items.forEach((item) => {
+      const li = document.createElement("li");
+      li.className = "box suggestion-item";
+      li.style.cursor = "pointer";
+      li.style.marginBottom = "0.5rem";
+      // display "Name — email"
+      const name = document.createElement("div");
+      name.textContent = `${item.user_name || "(no name)"} — ${
+        item.user_email
+      }`;
+      li.appendChild(name);
+
+      // click -> select user for editing
+      li.addEventListener("click", async () => {
+        await selectUser(item.user_email);
+      });
+
+      ul.appendChild(li);
+    });
+
+    suggestionsBox.appendChild(ul);
+  }
+
+  // Select a user and populate edit form
+  async function selectUser(email) {
+    const user = await loadUserByEmail(email);
+    if (!user) {
+      configure_messages_bar("User not found.");
+      return;
+    }
+    selectedUserEmail = email;
+    editSection.classList.remove("is-hidden");
+    editNameInput.value = user.user_name || "";
+    editEmailInput.value = user.user_email || ""; // read-only
+    // read current admin status
+    const isAdmin = await getAdminStatus(email);
+    editIsAdminCheckbox.checked = !!isAdmin;
+
+    // scroll suggestions box a bit so admin sees edit section
+    editSection.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // Save changes (only name and admin status)
+  async function saveSelectedUser() {
+    if (!selectedUserEmail) return configure_messages_bar("No user selected.");
+
+    const newName = (editNameInput.value || "").trim();
+    const wantAdmin = !!editIsAdminCheckbox.checked;
+    if (!newName) return configure_messages_bar("Name cannot be empty.");
+
+    try {
+      // Update user_profile document (doc ID = email)
+      await db.collection("user_profile").doc(selectedUserEmail).update({
+        user_name: newName,
+        // you could add updated_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // Update admins collection
+      const adminRef = db.collection("admins").doc(selectedUserEmail);
+      if (wantAdmin) {
+        await adminRef.set({ is_admin: true });
+      } else {
+        // remove admin if exists
+        const doc = await adminRef.get();
+        if (doc.exists) await adminRef.delete();
+      }
+
+      configure_messages_bar("User updated.");
+      // refresh suggestions and re-select to refresh UI
+      await refreshSuggestionsAndSelection();
+    } catch (err) {
+      console.error("Error saving user", err);
+      configure_messages_bar("Error updating user.");
+    }
+  }
+
+  // Delete user (Firestore only)
+  async function deleteSelectedUser() {
+    if (!selectedUserEmail) return configure_messages_bar("No user selected.");
+
+    if (
+      !confirm(
+        `Delete user ${selectedUserEmail}? This removes user_profile and admin record (Auth account NOT deleted).`
+      )
+    )
+      return;
+
+    try {
+      await db.collection("user_profile").doc(selectedUserEmail).delete();
+      // delete admin doc if exists
+      const adminRef = db.collection("admins").doc(selectedUserEmail);
+      const adminDoc = await adminRef.get();
+      if (adminDoc.exists) await adminRef.delete();
+
+      configure_messages_bar("User removed (Firestore).");
+
+      // Clear selection and refresh
+      selectedUserEmail = null;
+      editSection.classList.add("is-hidden");
+      editNameInput.value = "";
+      editEmailInput.value = "";
+
+      // Refresh suggestions
+      await refreshSuggestionsAndSelection();
+    } catch (err) {
+      console.error("Error deleting user", err);
+      configure_messages_bar("Error deleting user.");
+    }
+  }
+
+  // Create new user: creates user_profile doc, then admin doc if needed
+  async function createNewUser() {
+    const name = (newNameInput.value || "").trim();
+    const email = (newEmailInput.value || "").trim();
+    const password = newPasswordInput.value || ""; // this will NOT be used for Auth
+    const makeAdmin = !!newIsAdminCheckbox.checked;
+
+    if (!name || !email) {
+      return configure_messages_bar("Name and email are required.");
+    }
+
+    // Basic email pattern check
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return configure_messages_bar("Enter a valid email address.");
+    }
+
+    try {
+      // Only create Firestore user_profile
+      await db.collection("user_profile").doc(email).set({
+        user_email: email,
+        user_name: name,
+        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // Optionally add to admin collection
+      if (makeAdmin) {
+        await db.collection("admins").doc(email).set({ is_admin: true });
+      }
+
+      // Clear fields
+      newNameInput.value = "";
+      newEmailInput.value = "";
+      newPasswordInput.value = "";
+      newIsAdminCheckbox.checked = false;
+
+      configure_messages_bar("User created in Firestore.");
+
+      await refreshSuggestionsAndSelection();
+    } catch (err) {
+      console.error("Error creating user", err);
+      configure_messages_bar("Error creating user. Check console for details.");
+    }
+  }
+
+  // Utility: refresh suggestions (for current search input), optionally reselect current user
+  async function refreshSuggestionsAndSelection() {
+    const q = searchInput.value.trim();
+    const items = q ? await fetchUserSuggestions(q) : [];
+    suggestionResults = items;
+    renderSuggestions(items);
+
+    // If still have selectedUserEmail, try to reselect to refresh displayed values.
+    if (selectedUserEmail) {
+      const stillExists = await db
+        .collection("user_profile")
+        .doc(selectedUserEmail)
+        .get();
+      if (stillExists.exists) {
+        await selectUser(selectedUserEmail);
+      } else {
+        // If it was deleted, clear selection UI
+        selectedUserEmail = null;
+        editSection.classList.add("is-hidden");
+        editNameInput.value = "";
+        editEmailInput.value = "";
+      }
+    }
+  }
+
+  // Debounced search
+  const onSearchChange = debounce(async (ev) => {
+    const q = ev.target.value || "";
+    if (!q) {
+      suggestionsBox.innerHTML =
+        "<p class='has-text-grey'>Enter name or email to search</p>";
+      return;
+    }
+    const items = await fetchUserSuggestions(q);
+    suggestionResults = items;
+    renderSuggestions(items);
+  }, 200);
+
+  searchInput.addEventListener("input", onSearchChange);
+
+  // Save & delete buttons
+  if (saveUserBtn) saveUserBtn.addEventListener("click", saveSelectedUser);
+  if (deleteUserBtn)
+    deleteUserBtn.addEventListener("click", deleteSelectedUser);
+
+  // Create new user
+  if (createNewUserBtn)
+    createNewUserBtn.addEventListener("click", createNewUser);
+
+  // When modal opens, clear previous state
+  const manageUsersModal = document.getElementById("manageUsersModal");
+  if (manageUsersModal) {
+    // If you have a generic function that opens modal, hook into it instead.
+    // For simplicity, watch for 'is-active' class being added (mutation) or
+    // attach to the modal trigger.
+    const triggers = document.querySelectorAll(
+      '[data-target="manageUsersModal"]'
+    );
+    triggers.forEach((t) => {
+      t.addEventListener("click", () => {
+        // reset UI
+        searchInput.value = "";
+        suggestionsBox.innerHTML =
+          "<p class='has-text-grey'>Enter name or email to search</p>";
+        editSection.classList.add("is-hidden");
+        selectedUserEmail = null;
+      });
+    });
+  }
+
+  // Initial suggestion placeholder
+  suggestionsBox.innerHTML =
+    "<p class='has-text-grey'>Enter name or email to search</p>";
+});

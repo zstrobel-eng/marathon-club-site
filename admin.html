@@ -341,7 +341,7 @@
     </div>
 
     <!-- Placeholder Modals -->
-    <div id="manageUsersModal" class="modal">
+    <!-- <div id="manageUsersModal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
@@ -350,6 +350,102 @@
         </header>
         <section class="modal-card-body">
           <p>This is where user management (edit/delete users) will appear.</p>
+        </section>
+      </div>
+    </div> -->
+
+    <div id="manageUsersModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Manage Users</p>
+          <button class="delete close-modal"></button>
+        </header>
+
+        <section class="modal-card-body">
+          <!-- SEARCH SECTION -->
+          <div class="field">
+            <label class="label">Search Users</label>
+            <input
+              id="userSearch"
+              class="input"
+              type="text"
+              placeholder="Search by name or email"
+            />
+          </div>
+
+          <div id="userSuggestions" class="box"></div>
+
+          <hr />
+
+          <!-- EDIT USER SECTION -->
+          <div id="editUserSection" class="is-hidden">
+            <h2 class="subtitle">Edit User</h2>
+
+            <div class="field">
+              <label class="label">Name</label>
+              <input id="editUserName" class="input" type="text" />
+            </div>
+
+            <div class="field">
+              <label class="label">Email</label>
+              <input id="editUserEmail" class="input" type="email" />
+            </div>
+
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" id="editIsAdmin" /> Admin User
+              </label>
+            </div>
+
+            <button id="saveUserChanges" class="button is-primary">
+              Save Changes
+            </button>
+            <button id="deleteUser" class="button is-danger">
+              Delete User
+            </button>
+          </div>
+
+          <hr />
+
+          <!-- ADD NEW USER -->
+          <h2 class="subtitle">Add New User</h2>
+
+          <div class="field">
+            <input
+              id="newUserName"
+              class="input"
+              type="text"
+              placeholder="Name"
+            />
+          </div>
+
+          <div class="field">
+            <input
+              id="newUserEmail"
+              class="input"
+              type="email"
+              placeholder="Email"
+            />
+          </div>
+
+          <div class="field">
+            <input
+              id="newUserPassword"
+              class="input"
+              type="password"
+              placeholder="Temporary Password"
+            />
+          </div>
+
+          <label class="checkbox">
+            <input type="checkbox" id="newIsAdmin" />
+            Make Admin
+          </label>
+
+          <button id="createNewUser" class="button is-success mt-2">
+            Create User
+          </button>
         </section>
       </div>
     </div>
