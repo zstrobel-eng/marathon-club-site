@@ -511,3 +511,173 @@ function attachModalHandlers() {
     });
   });
 }
+
+// ************************** Admin Managing Routes **************************
+
+// Load routes into manageRoutesModal
+function loadManageRoutes() {
+  const modalBody = document.querySelector(
+    "#manageRoutesModal .modal-card-body"
+  );
+  if (!modalBody) return;
+
+  // Clear existing list
+  modalBody.innerHTML = "";
+
+  db.collection("routes")
+    .orderBy("route_distance")
+    .get()
+    .then((snapshot) => {
+      // Sort by route_distance
+      const routes = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      routes.sort((a, b) => a.route_distance - b.route_distance);
+
+      if (routes.length === 0) {
+        modalBody.innerHTML = "<p>No routes found.</p>";
+        return;
+      }
+
+      // Create list
+      const ul = document.createElement("ul");
+      routes.forEach((route) => {
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.alignItems = "center";
+        li.style.marginBottom = "5px";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = route.route_title;
+        nameSpan.style.flex = "1";
+
+        // Rename button
+        const renameBtn = document.createElement("button");
+        renameBtn.textContent = "Rename";
+        renameBtn.classList.add("button", "is-small", "is-info", "mr-2");
+        renameBtn.addEventListener("click", () => {
+          const newName = prompt("Enter new route name:", route.route_title);
+          if (newName && newName.trim() !== "") {
+            db.collection("routes")
+              .doc(route.id)
+              .update({ route_title: newName.trim() })
+              .then(() => loadManageRoutes()) // refresh list
+              .catch((err) => console.error("Error renaming route:", err));
+          }
+        });
+
+        // Delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("button", "is-small", "is-danger");
+        deleteBtn.addEventListener("click", () => {
+          if (
+            confirm(`Are you sure you want to delete "${route.route_title}"?`)
+          ) {
+            db.collection("routes")
+              .doc(route.id)
+              .delete()
+              .then(() => loadManageRoutes()) // refresh list
+              .catch((err) => console.error("Error deleting route:", err));
+          }
+        });
+
+        li.appendChild(nameSpan);
+        li.appendChild(renameBtn);
+        li.appendChild(deleteBtn);
+        ul.appendChild(li);
+      });
+
+      modalBody.appendChild(ul);
+    })
+    .catch((err) => console.error("Error loading routes:", err));
+}
+
+// Attach listener to open modal and load routes
+const manageRoutesBtn = document.querySelector(
+  '[data-target="manageRoutesModal"]'
+);
+if (manageRoutesBtn) {
+  manageRoutesBtn.addEventListener("click", () => {
+    const modal = document.getElementById("manageRoutesModal");
+    if (modal) modal.classList.add("is-active");
+    loadManageRoutes();
+  });
+}
+
+// Close modal
+const manageRoutesClose = document.querySelector(
+  "#manageRoutesModal .close-modal"
+);
+if (manageRoutesClose) {
+  manageRoutesClose.addEventListener("click", () => {
+    const modal = document.getElementById("manageRoutesModal");
+    if (modal) modal.classList.remove("is-active");
+  });
+}
+// ************************** Admin Add New Route **************************
+
+// Add Route functionality
+document.addEventListener("DOMContentLoaded", () => {
+  const addRouteBtn = document.querySelector(
+    "#addRouteModal .button.is-primary"
+  );
+  const addRouteModal = document.getElementById("addRouteModal");
+  const closeBtns = addRouteModal.querySelectorAll(
+    ".delete, .modal-background"
+  );
+
+  if (addRouteBtn && addRouteModal) {
+    addRouteBtn.addEventListener("click", () => {
+      const routeTitleInput = document.getElementById("route_title");
+      const stravaInfoInput = document.getElementById("strava_info");
+      const routeDistanceInput = document.getElementById("route_distance");
+
+      const routeTitle = routeTitleInput.value.trim();
+      const stravaInfo = stravaInfoInput.value.trim();
+      const routeDistance = parseFloat(routeDistanceInput.value.trim());
+
+      // Validate input
+      if (!routeTitle || !stravaInfo || isNaN(routeDistance)) {
+        configure_messages_bar("Please fill out all fields correctly.");
+        return;
+      }
+
+      // Add route to Firestore
+      db.collection("routes")
+        .add({
+          route_title: routeTitle,
+          strava_info: stravaInfo,
+          route_distance: routeDistance,
+        })
+        .then(() => {
+          // Close modal
+          addRouteModal.classList.remove("is-active");
+
+          // Clear input fields
+          routeTitleInput.value = "";
+          stravaInfoInput.value = "";
+          routeDistanceInput.value = "";
+
+          // Show success message
+          configure_messages_bar(`Route "${routeTitle}" added successfully!`);
+        })
+        .catch((error) => {
+          console.error("Error adding route: ", error);
+          configure_messages_bar("Error adding route. Please try again.");
+        });
+    });
+
+    // Close modal when clicking close button or background
+    closeBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        addRouteModal.classList.remove("is-active");
+        // Optionally clear fields on close
+        document.getElementById("route_title").value = "";
+        document.getElementById("strava_info").value = "";
+        document.getElementById("route_distance").value = "";
+      });
+    });
+  }
+});
