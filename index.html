@@ -181,6 +181,7 @@
               />
             </div>
           </div>
+
           <div class="field">
             <label class="label">Email</label>
             <div class="control">
@@ -194,6 +195,7 @@
               />
             </div>
           </div>
+
           <div class="field">
             <label class="label">Password</label>
             <div class="control">
@@ -207,6 +209,11 @@
               />
             </div>
           </div>
+
+          <!-- ADD THIS NEW ERROR MESSAGE BOX -->
+          <p id="signUpError" class="has-text-danger" style="display: none"></p>
+
+          <!-- Success message box (you already had this) -->
           <p id="signupMessage" class="has-text-success"></p>
 
           <footer class="modal-card-foot">
@@ -258,7 +265,8 @@
 
           <div class="field">
             <label class="checkbox">
-              <input type="checkbox" id="adminToggle" /> Sign in as admin
+              <input type="checkbox" id="adminToggle" />
+              Sign in as admin
             </label>
           </div>
 
@@ -274,6 +282,13 @@
               />
             </div>
           </div>
+
+          <!-- ERROR MESSAGE BOX (NEW + REQUIRED) -->
+          <p
+            id="signInError"
+            class="has-text-danger"
+            style="display: none; margin-top: 10px"
+          ></p>
 
           <footer class="modal-card-foot">
             <button type="submit" class="button is-primary">Sign In</button>

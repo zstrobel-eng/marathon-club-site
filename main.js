@@ -60,64 +60,195 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// Sign-up
-if (r_e("signUpForm")) {
-  r_e("signUpForm").addEventListener("submit", (e) => {
+// Sign up
+const signUpForm = r_e("signUpForm");
+const signUpError = r_e("signUpError");
+
+function showSignUpError(msg) {
+  if (signUpError) {
+    signUpError.textContent = msg;
+    signUpError.style.display = "block";
+  } else {
+    alert(msg);
+  }
+}
+
+if (signUpForm) {
+  signUpForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    let email = r_e("signUpEmail").value;
+
+    if (signUpError) {
+      signUpError.textContent = "";
+      signUpError.style.display = "none";
+    }
+
+    let email = r_e("signUpEmail").value.trim();
     let password = r_e("signUpPassword").value;
-    let name = r_e("userName").value;
+    let name = r_e("userName").value.trim();
+
+    if (!name || !email || !password) {
+      showSignUpError("Please fill out all fields.");
+      return;
+    }
+
+    if (password.length < 6) {
+      showSignUpError("Password must be at least 6 characters long.");
+      return;
+    }
+
     let user = {
       user_email: email,
       user_name: name,
     };
-    auth.createUserWithEmailAndPassword(email, password).then(() => {
-      if (r_e("signUpModal")) r_e("signUpModal").classList.remove("is-active");
-      r_e("signUpForm").reset();
-      db.collection("user_profile")
-        .where("user_email", "==", email)
-        .get()
-        .then((mydata) => {
-          let mydocs = mydata.docs;
-          console.log(mydocs);
 
-          mydocs.forEach((doc) => {
-            name = `${doc.data().user_name}`;
-          });
-          configure_messages_bar(`Welcome ${name}!`);
-        });
-    });
-    db.collection("user_profile")
-      .doc(email)
-      .set(user)
+    auth
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        console.log("John added");
+        return db.collection("user_profile").doc(email).set(user);
+      })
+      .then(() => {
+        return db
+          .collection("user_profile")
+          .where("user_email", "==", email)
+          .get();
+      })
+      .then((mydata) => {
+        let mydocs = mydata.docs;
+        console.log(mydocs);
+
+        mydocs.forEach((doc) => {
+          name = `${doc.data().user_name}`;
+        });
+
+        configure_messages_bar(`Welcome ${name}!`);
+
+        if (r_e("signUpModal")) {
+          r_e("signUpModal").classList.remove("is-active");
+        }
+        signUpForm.reset();
+      })
+      .catch((error) => {
+        console.error(error);
+
+        let message = "Something went wrong. Please try again.";
+
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            message =
+              "This email is already registered. Try logging in instead.";
+            break;
+          case "auth/invalid-email":
+            message = "Please enter a valid email address.";
+            break;
+          case "auth/weak-password":
+            message = "Your password is too weak. Use at least 6 characters.";
+            break;
+          case "auth/operation-not-allowed":
+            message =
+              "Sign up is currently disabled. Please contact support if this continues.";
+            break;
+          case "permission-denied":
+            message =
+              "You do not have permission to create this account. Please contact support.";
+            break;
+          default:
+            if (error.message) {
+              message = error.message;
+            }
+        }
+
+        showSignUpError(message);
       });
   });
 }
 
-// sign in user
+// SIGN IN USER
 if (r_e("signInForm")) {
   r_e("signInForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    let email = r_e("signInEmail").value;
-    let password = r_e("signInPassword").value;
-    auth.signInWithEmailAndPassword(email, password).then(() => {
-      db.collection("user_profile")
-        .where("user_email", "==", email)
-        .get()
-        .then((mydata) => {
-          let mydocs = mydata.docs;
-          console.log(mydocs);
 
-          mydocs.forEach((doc) => {
-            name2 = `${doc.data().user_name}`;
-          });
-          configure_messages_bar(`Welcome back ${name2}!`);
+    const errorBox = r_e("signInError");
+    if (errorBox) {
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    const email = r_e("signInEmail").value.trim();
+    const password = r_e("signInPassword").value;
+
+    if (!email || !password) {
+      if (errorBox) {
+        errorBox.textContent = "Please enter both email and password.";
+        errorBox.style.display = "block";
+      }
+      return;
+    }
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        // get the user's name from Firestore
+        return db
+          .collection("user_profile")
+          .where("user_email", "==", email)
+          .get();
+      })
+      .then((snapshot) => {
+        let name2 = "User";
+        snapshot.docs.forEach((doc) => {
+          name2 = doc.data().user_name;
         });
-      if (r_e("signInModal")) r_e("signInModal").classList.remove("is-active");
-      r_e("signInForm").reset();
-    });
+
+        configure_messages_bar(`Welcome back ${name2}!`);
+
+        if (r_e("signInModal")) {
+          r_e("signInModal").classList.remove("is-active");
+        }
+        r_e("signInForm").reset();
+      })
+      .catch((error) => {
+        console.log("SIGN IN ERROR RAW:", error);
+        const errorBox = r_e("signInError");
+
+        let message = "Unable to sign in. Please try again.";
+
+        const code = error.code || "";
+        const raw = error && error.message ? String(error.message) : "";
+
+        // check firebase codes first
+        if (code === "auth/user-not-found" || raw.includes("USER_NOT_FOUND")) {
+          message = "No account found with that email.";
+        } else if (
+          code === "auth/wrong-password" ||
+          raw.includes("INVALID_LOGIN_CREDENTIALS") ||
+          raw.includes("WRONG_PASSWORD")
+        ) {
+          message = "Incorrect email or password. Please try again.";
+        } else if (
+          code === "auth/invalid-email" ||
+          raw.includes("INVALID_EMAIL")
+        ) {
+          message = "Please enter a valid email address.";
+        } else if (
+          code === "auth/too-many-requests" ||
+          raw.includes("TOO_MANY_ATTEMPTS")
+        ) {
+          message =
+            "Too many failed attempts. Please wait a moment and try again.";
+        } else if (
+          code === "auth/user-disabled" ||
+          raw.includes("USER_DISABLED")
+        ) {
+          message = "This account has been disabled. Please contact support.";
+        }
+
+        if (errorBox) {
+          errorBox.textContent = message;
+          errorBox.style.display = "block";
+        } else {
+          alert(message);
+        }
+      });
   });
 }
 
