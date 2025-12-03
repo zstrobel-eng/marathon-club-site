@@ -618,7 +618,7 @@ if (manageRoutesClose) {
 }
 // ************************** Admin Add New Route **************************
 
-// Add Route functionality
+// Add Route functionality (with auto-refresh)
 document.addEventListener("DOMContentLoaded", () => {
   const addRouteBtn = document.querySelector(
     "#addRouteModal .button.is-primary"
@@ -662,6 +662,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Show success message
           configure_messages_bar(`Route "${routeTitle}" added successfully!`);
+
+          // Refresh Manage Routes modal content
+          if (typeof loadManageRoutes === "function") {
+            loadManageRoutes();
+          }
+
+          // Refresh routes page if currently on routes.html
+          if (window.location.pathname.includes("routes.html")) {
+            if (typeof loadRoutes === "function") {
+              loadRoutes(true); // use true to denote "refresh"
+            }
+          }
         })
         .catch((error) => {
           console.error("Error adding route: ", error);
@@ -673,7 +685,8 @@ document.addEventListener("DOMContentLoaded", () => {
     closeBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         addRouteModal.classList.remove("is-active");
-        // Optionally clear fields on close
+
+        // Clear fields on close
         document.getElementById("route_title").value = "";
         document.getElementById("strava_info").value = "";
         document.getElementById("route_distance").value = "";
