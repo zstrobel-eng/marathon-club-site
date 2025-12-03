@@ -734,60 +734,44 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // Fetch suggestions by searching both user_email and user_name.
-  // Uses prefix queries. We perform two queries and merge results (dedupe by doc ID).
+  // ==========================================
+  // GLOBAL USER CACHE (for substring searching)
+  // ==========================================
+  let allUsersCache = [];
+
+  // Load all users into cache once
+  async function loadAllUsers() {
+    const snap = await db.collection("user_profile").get();
+    allUsersCache = snap.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  }
+
+  // Substring search across user_name + user_email
   async function fetchUserSuggestions(queryText) {
     if (!queryText || queryText.trim().length === 0) return [];
 
     const q = queryText.trim().toLowerCase();
 
-    const resultsMap = new Map();
-
-    try {
-      // Search by user_email prefix
-      const emailSnap = await db
-        .collection("user_profile")
-        .orderBy("user_email")
-        .startAt(q)
-        .endAt(q + "\uf8ff")
-        .limit(20)
-        .get();
-
-      emailSnap.forEach((doc) => {
-        resultsMap.set(doc.id, { id: doc.id, ...doc.data() });
-      });
-    } catch (e) {
-      // ignore partial failures
-      console.warn("Email prefix query failed (might be case-sensitive)", e);
+    // load cache only once
+    if (allUsersCache.length === 0) {
+      await loadAllUsers();
     }
 
-    try {
-      // Search by user_name prefix
-      const nameSnap = await db
-        .collection("user_profile")
-        .orderBy("user_name")
-        .startAt(q)
-        .endAt(q + "\uf8ff")
-        .limit(20)
-        .get();
-
-      nameSnap.forEach((doc) => {
-        resultsMap.set(doc.id, { id: doc.id, ...doc.data() });
-      });
-    } catch (e) {
-      console.warn("Name prefix query failed (might be case-sensitive)", e);
-    }
-
-    // Convert to array and sort by user_name (fallback to email)
-    const arr = Array.from(resultsMap.values()).sort((a, b) => {
-      const an = (a.user_name || "").toLowerCase();
-      const bn = (b.user_name || "").toLowerCase();
-      if (an < bn) return -1;
-      if (an > bn) return 1;
-      return (a.user_email || "").localeCompare(b.user_email || "");
+    // filter for ANY substring match
+    const matches = allUsersCache.filter((user) => {
+      const name = (user.user_name || "").toLowerCase();
+      const email = (user.user_email || "").toLowerCase();
+      return name.includes(q) || email.includes(q);
     });
 
-    return arr;
+    // sort alphabetically by name
+    matches.sort((a, b) =>
+      (a.user_name || "").localeCompare(b.user_name || "")
+    );
+
+    return matches;
   }
 
   // Load full user data by email (doc ID)
@@ -1043,4 +1027,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial suggestion placeholder
   suggestionsBox.innerHTML =
     "<p class='has-text-grey'>Enter name or email to search</p>";
+});
+
+// count number of user_profile documents and display in admin dashboard
+function updateMemberCount() {
+  db.collection("user_profile")
+    .get()
+    .then((snapshot) => {
+      const count = snapshot.size;
+      const memberCountEl = document.getElementById("memberCount");
+
+      if (memberCountEl) {
+        memberCountEl.textContent = `Total Users Accounts: ${count}`;
+      }
+    })
+    .catch((err) => {
+      console.error("Error counting users:", err);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateMemberCount();
+
+  loadAllUsers();
 });
