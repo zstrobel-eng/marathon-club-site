@@ -24,6 +24,7 @@ const navTimeout = parseInt(
 );
 
 const defaultPages = [
+  "/",
   "/index.html",
   "/about.html",
   "/calendar.html",
