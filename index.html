@@ -263,6 +263,11 @@
             </div>
           </div>
 
+          <!-- Forgot password link -->
+          <p class="help">
+            <a id="forgotPasswordLink">Forgot your password?</a>
+          </p>
+
           <div class="field">
             <label class="checkbox">
               <input type="checkbox" id="adminToggle" />
@@ -295,6 +300,55 @@
           </footer>
         </form>
         <!-- FORM END -->
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Reset Password</p>
+          <button
+            id="forgotPasswordClose"
+            class="delete"
+            aria-label="close"
+          ></button>
+        </header>
+
+        <form id="forgotPasswordForm" class="modal-card-body">
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input
+                id="forgotPasswordEmail"
+                class="input"
+                type="email"
+                placeholder="Enter your account email"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Error + success messages -->
+          <p
+            id="forgotPasswordError"
+            class="has-text-danger"
+            style="display: none; margin-top: 8px"
+          ></p>
+
+          <p
+            id="forgotPasswordSuccess"
+            class="has-text-success"
+            style="display: none; margin-top: 8px"
+          ></p>
+
+          <footer class="modal-card-foot">
+            <button type="submit" class="button is-primary">
+              Send reset email
+            </button>
+          </footer>
+        </form>
       </div>
     </div>
 
