@@ -44,8 +44,8 @@ function show_events() {
       //   account = null;
       // }
       mydata.forEach((d) => {
-        html += `<button onclick="del_doc('${d.id}')"
-        class="button has-background-danger is-pulled-right">Delete Event</button>`;
+        // html += `<button onclick="del_doc('${d.id}')"
+        // class="button has-background-danger is-pulled-right">Delete Event</button>`;
         let ts = d.data().time; // Firestore Timestamp
         console.log(typeof ts);
         let time = ts.toDate();
@@ -1257,6 +1257,110 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ************************** Admin Managing Events **************************
+
+// Load routes into manageEventsModal
+function loadManageEvents() {
+  const modalBody = document.querySelector(
+    "#manageEventsModal .modal-card-body"
+  );
+  if (!modalBody) return;
+
+  // Clear existing list
+  modalBody.innerHTML = "";
+
+  db.collection("events")
+    .orderBy("id")
+    .get()
+    .then((snapshot) => {
+      // Sort by route_distance
+      const events = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      console.log("Loaded events:", events);
+      events.sort((a, b) => a.id - b.id);
+
+      if (events.length === 0) {
+        modalBody.innerHTML = "<p>No events found.</p>";
+        return;
+      }
+
+      // Create list
+      const ul = document.createElement("ul");
+      events.forEach((event) => {
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.alignItems = "center";
+        li.style.marginBottom = "5px";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = event.title;
+        nameSpan.style.flex = "1";
+
+        // Rename button
+        const renameBtn = document.createElement("button");
+        renameBtn.textContent = "Rename";
+        renameBtn.classList.add("button", "is-small", "is-info", "mr-2");
+        renameBtn.addEventListener("click", () => {
+          const newName = prompt("Enter new event name:", event.title);
+          if (newName && newName.trim() !== "") {
+            db.collection("events")
+              .doc(event.id)
+              .update({ title: newName.trim() })
+              .then(() => loadManageEvents()) // refresh list
+              .catch((err) => console.error("Error renaming event:", err));
+          }
+        });
+
+        // Delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("button", "is-small", "is-danger");
+        deleteBtn.addEventListener("click", () => {
+          if (confirm(`Are you sure you want to delete "${event.title}"?`)) {
+            db.collection("events")
+              .doc(event.id)
+              .delete()
+              .then(() => loadManageEvents()) // refresh list
+              .catch((err) => console.error("Error deleting event:", err));
+          }
+        });
+
+        li.appendChild(nameSpan);
+        li.appendChild(renameBtn);
+        li.appendChild(deleteBtn);
+        ul.appendChild(li);
+      });
+
+      modalBody.appendChild(ul);
+    })
+    .catch((err) => console.error("Error loading routes:", err));
+}
+
+// Attach listener to open modal and load routes
+const manageEventsBtn = document.querySelector(
+  '[data-target="manageEventsModal"]'
+);
+if (manageEventsBtn) {
+  manageEventsBtn.addEventListener("click", () => {
+    const modal = document.getElementById("manageEventsModal");
+    if (modal) modal.classList.add("is-active");
+    loadManageEvents();
+  });
+}
+
+// Close modal
+const manageEventsClose = document.querySelector(
+  "#manageEventsModal .close-modal"
+);
+if (manageEventsClose) {
+  manageEventsClose.addEventListener("click", () => {
+    const modal = document.getElementById("manageEventsModal");
+    if (modal) modal.classList.remove("is-active");
+  });
+}
 
 // ******************** ADMIN USER MANAGEMENT ******************
 
