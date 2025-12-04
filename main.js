@@ -1136,6 +1136,12 @@ document.addEventListener("DOMContentLoaded", () => {
       configure_messages_bar("User updated.");
       // refresh suggestions and re-select to refresh UI
       await refreshSuggestionsAndSelection();
+
+      // Close manageUsersModal after successful update
+      const manageUsersModal = document.getElementById("manageUsersModal");
+      if (manageUsersModal) {
+        manageUsersModal.classList.remove("is-active");
+      }
     } catch (err) {
       console.error("Error saving user", err);
       configure_messages_bar("Error updating user.");
@@ -1170,6 +1176,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Refresh suggestions
       await refreshSuggestionsAndSelection();
+
+      // Close manageUsersModal after successful deletion
+      const manageUsersModal = document.getElementById("manageUsersModal");
+      if (manageUsersModal) {
+        manageUsersModal.classList.remove("is-active");
+      }
     } catch (err) {
       console.error("Error deleting user", err);
       configure_messages_bar("Error deleting user.");
