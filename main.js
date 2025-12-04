@@ -252,6 +252,103 @@ if (r_e("signInForm")) {
   });
 }
 
+// ===== Forgot Password Feature =====
+
+const forgotLink = r_e("forgotPasswordLink");
+const forgotModal = r_e("forgotPasswordModal");
+const forgotClose = r_e("forgotPasswordClose");
+const forgotForm = r_e("forgotPasswordForm");
+const forgotEmailInput = r_e("forgotPasswordEmail");
+const forgotError = r_e("forgotPasswordError");
+const forgotSuccess = r_e("forgotPasswordSuccess");
+
+function openForgotPasswordModal() {
+  if (forgotModal) {
+    // pre-fill with email from sign in form if present
+    const signInEmailEl = r_e("signInEmail");
+    if (signInEmailEl && signInEmailEl.value) {
+      forgotEmailInput.value = signInEmailEl.value.trim();
+    }
+    forgotError.textContent = "";
+    forgotSuccess.textContent = "";
+    forgotError.style.display = "none";
+    forgotSuccess.style.display = "none";
+    forgotModal.classList.add("is-active");
+  }
+}
+
+function closeForgotPasswordModal() {
+  if (forgotModal) {
+    forgotModal.classList.remove("is-active");
+  }
+}
+
+// open modal when link is clicked
+if (forgotLink) {
+  forgotLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    openForgotPasswordModal();
+  });
+}
+
+// close button
+if (forgotClose) {
+  forgotClose.addEventListener("click", (e) => {
+    e.preventDefault();
+    closeForgotPasswordModal();
+  });
+}
+
+// optional: close when clicking background
+if (forgotModal) {
+  const bg = forgotModal.querySelector(".modal-background");
+  if (bg) {
+    bg.addEventListener("click", closeForgotPasswordModal);
+  }
+}
+
+// submit handler: send reset email
+if (forgotForm) {
+  forgotForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // clear old messages
+    forgotError.textContent = "";
+    forgotSuccess.textContent = "";
+    forgotError.style.display = "none";
+    forgotSuccess.style.display = "none";
+
+    const email = forgotEmailInput.value.trim();
+
+    if (!email) {
+      forgotError.textContent = "Please enter your email.";
+      forgotError.style.display = "block";
+      return;
+    }
+
+    auth
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        // IMPORTANT: we keep the message generic
+        forgotSuccess.textContent =
+          "If an account exists with that email, a reset link has been sent. Remember to check spam folder as well.";
+        forgotSuccess.style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Forgot password error:", error);
+
+        // still keep it generic for security
+        if (error.code === "auth/invalid-email") {
+          forgotError.textContent = "Please enter a valid email address.";
+        } else {
+          forgotError.textContent =
+            "Unable to send reset email right now. Please try again later.";
+        }
+        forgotError.style.display = "block";
+      });
+  });
+}
+
 // sign out user
 if (r_e(`signOutBtn`)) {
   r_e(`signOutBtn`).addEventListener("click", () => {
