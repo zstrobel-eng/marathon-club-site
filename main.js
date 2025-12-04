@@ -252,6 +252,42 @@ if (r_e("signInForm")) {
   });
 }
 
+// authenticate admin user
+
+function configureAdminNav(email) {
+  if (!email) {
+    // Hide admin link if no user signed in
+    document.querySelectorAll(".adminNav").forEach((el) => {
+      el.classList.add("is-hidden");
+    });
+    return;
+  }
+
+  // Check if this user is in the admins collection
+  db.collection("admins")
+    .doc(email)
+    .get()
+    .then((doc) => {
+      const isAdmin = doc.exists;
+      document.querySelectorAll(".adminNav").forEach((el) => {
+        if (isAdmin) {
+          el.classList.remove("is-hidden");
+        } else {
+          el.classList.add("is-hidden");
+        }
+      });
+    })
+    .catch((err) => console.error("Error checking admin status:", err));
+}
+
+// =========================
+// Hook into auth state change
+// =========================
+auth.onAuthStateChanged((user) => {
+  const email = user ? user.email : null;
+  configureAdminNav(email);
+});
+
 // ===== Forgot Password Feature =====
 
 const forgotLink = r_e("forgotPasswordLink");
@@ -354,6 +390,7 @@ if (r_e(`signOutBtn`)) {
   r_e(`signOutBtn`).addEventListener("click", () => {
     auth.signOut().then(() => {
       configure_messages_bar(`Goodbye!`);
+      window.location.href = "index.html";
     });
   });
 }
