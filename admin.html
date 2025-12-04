@@ -88,11 +88,29 @@
                 <p class="card-header-title">Users</p>
               </header>
               <div class="card-content">
-                <p><strong>Total Members:</strong> 42</p>
+                <p id="memberCount"></p>
+                <h3 class="is-6 pt-3"><strong>Manage User Accounts</strong></h3>
+                <p class="pt-2">
+                  To manage user accounts, click the "Manage Users" button
+                  below.
+                </p>
+                <p class="pt-2">
+                  Within the "Manage Users" section you can search for users,
+                  edit their information, or delete accounts as necessary.
+                </p>
+                <p class="pt-2">
+                  <strong>Note:</strong>
+                </p>
                 <ul>
-                  <li>Alice Johnson – alice@wisc.edu</li>
-                  <li>Bob Smith – bob@wisc.edu</li>
-                  <li>…</li>
+                  <li class="pt-2">
+                    - Be cautious when deleting user accounts, as this action
+                    cannot be undone.
+                  </li>
+                  <li class="pt-2">
+                    - Selecting the "Admin User" checkbox will grant the user
+                    admin privileges. Admin priveleges allow users to access the
+                    admin dashboard and manage site content.
+                  </li>
                 </ul>
               </div>
               <footer class="card-footer">
@@ -341,7 +359,7 @@
     </div>
 
     <!-- Placeholder Modals -->
-    <div id="manageUsersModal" class="modal">
+    <!-- <div id="manageUsersModal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
@@ -350,6 +368,102 @@
         </header>
         <section class="modal-card-body">
           <p>This is where user management (edit/delete users) will appear.</p>
+        </section>
+      </div>
+    </div> -->
+
+    <div id="manageUsersModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Manage Users</p>
+          <button class="delete close-modal"></button>
+        </header>
+
+        <section class="modal-card-body">
+          <!-- SEARCH SECTION -->
+          <div class="field">
+            <label class="label">Search Users</label>
+            <input
+              id="userSearch"
+              class="input"
+              type="text"
+              placeholder="Search by name or email"
+            />
+          </div>
+
+          <div id="userSuggestions" class="box"></div>
+
+          <hr />
+
+          <!-- EDIT USER SECTION -->
+          <div id="editUserSection" class="is-hidden">
+            <h2 class="subtitle">Edit User</h2>
+
+            <div class="field">
+              <label class="label">Name</label>
+              <input id="editUserName" class="input" type="text" />
+            </div>
+
+            <div class="field">
+              <label class="label">Email</label>
+              <input id="editUserEmail" class="input" type="email" />
+            </div>
+
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" id="editIsAdmin" /> Admin User
+              </label>
+            </div>
+
+            <button id="saveUserChanges" class="button is-primary">
+              Save Changes
+            </button>
+            <button id="deleteUser" class="button is-danger">
+              Delete User
+            </button>
+          </div>
+
+          <hr />
+
+          <!-- ADD NEW USER -->
+          <h2 class="subtitle is-hidden">Add New User</h2>
+
+          <div class="field is-hidden">
+            <input
+              id="newUserName"
+              class="input"
+              type="text"
+              placeholder="Name"
+            />
+          </div>
+
+          <div class="field is-hidden">
+            <input
+              id="newUserEmail"
+              class="input"
+              type="email"
+              placeholder="Email"
+            />
+          </div>
+
+          <div class="field is-hidden">
+            <input
+              id="newUserPassword"
+              class="input"
+              type="password"
+              placeholder="Temporary Password"
+            />
+          </div>
+
+          <label class="checkbox is-hidden">
+            <input type="checkbox" id="newIsAdmin" />
+            Make Admin
+          </label>
+
+          <button id="createNewUser" class="button is-success mt-2 is-hidden">
+            Create User
+          </button>
         </section>
       </div>
     </div>

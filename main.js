@@ -749,7 +749,7 @@ if (manageRoutesClose) {
 }
 // ************************** Admin Add New Route **************************
 
-// Add Route functionality
+// Add Route functionality (with auto-refresh)
 document.addEventListener("DOMContentLoaded", () => {
   const addRouteBtn = document.querySelector(
     "#addRouteModal .button.is-primary"
@@ -793,6 +793,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Show success message
           configure_messages_bar(`Route "${routeTitle}" added successfully!`);
+
+          // Refresh Manage Routes modal content
+          if (typeof loadManageRoutes === "function") {
+            loadManageRoutes();
+          }
+
+          // Refresh routes page if currently on routes.html
+          if (window.location.pathname.includes("routes.html")) {
+            if (typeof loadRoutes === "function") {
+              loadRoutes(true); // use true to denote "refresh"
+            }
+          }
         })
         .catch((error) => {
           console.error("Error adding route: ", error);
@@ -804,11 +816,373 @@ document.addEventListener("DOMContentLoaded", () => {
     closeBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         addRouteModal.classList.remove("is-active");
-        // Optionally clear fields on close
+
+        // Clear fields on close
         document.getElementById("route_title").value = "";
         document.getElementById("strava_info").value = "";
         document.getElementById("route_distance").value = "";
       });
     });
   }
+});
+
+// ******************** ADMIN USER MANAGEMENT ******************
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!window.location.pathname.includes("admin.html")) return;
+
+  // Elements
+  const searchInput = document.getElementById("userSearch");
+  const suggestionsBox = document.getElementById("userSuggestions");
+  const editSection = document.getElementById("editUserSection");
+  const editNameInput = document.getElementById("editUserName");
+  const editEmailInput = document.getElementById("editUserEmail"); // read-only in UI
+  const editIsAdminCheckbox = document.getElementById("editIsAdmin");
+  const saveUserBtn = document.getElementById("saveUserChanges");
+  const deleteUserBtn = document.getElementById("deleteUser");
+
+  const newNameInput = document.getElementById("newUserName");
+  const newEmailInput = document.getElementById("newUserEmail");
+  const newPasswordInput = document.getElementById("newUserPassword");
+  const newIsAdminCheckbox = document.getElementById("newIsAdmin");
+  const createNewUserBtn = document.getElementById("createNewUser");
+
+  if (!searchInput || !suggestionsBox || !editSection) {
+    console.warn("Admin user management: missing required DOM elements.");
+    return;
+  }
+
+  // State
+  let suggestionResults = []; // array of { id: email, ...data }
+  let selectedUserEmail = null;
+
+  // Debounce helper
+  function debounce(fn, wait = 250) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  // ==========================================
+  // GLOBAL USER CACHE (for substring searching)
+  // ==========================================
+  let allUsersCache = [];
+
+  // Load all users into cache once
+  async function loadAllUsers() {
+    const snap = await db.collection("user_profile").get();
+    allUsersCache = snap.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  }
+
+  // Substring search across user_name + user_email
+  async function fetchUserSuggestions(queryText) {
+    if (!queryText || queryText.trim().length === 0) return [];
+
+    const q = queryText.trim().toLowerCase();
+
+    // load cache only once
+    if (allUsersCache.length === 0) {
+      await loadAllUsers();
+    }
+
+    // filter for ANY substring match
+    const matches = allUsersCache.filter((user) => {
+      const name = (user.user_name || "").toLowerCase();
+      const email = (user.user_email || "").toLowerCase();
+      return name.includes(q) || email.includes(q);
+    });
+
+    // sort alphabetically by name
+    matches.sort((a, b) =>
+      (a.user_name || "").localeCompare(b.user_name || "")
+    );
+
+    return matches;
+  }
+
+  // Load full user data by email (doc ID)
+  async function loadUserByEmail(email) {
+    if (!email) return null;
+    const doc = await db.collection("user_profile").doc(email).get();
+    if (!doc.exists) return null;
+    return { id: doc.id, ...doc.data() };
+  }
+
+  // Check admin status by admins/{email}
+  async function getAdminStatus(email) {
+    const doc = await db.collection("admins").doc(email).get();
+    return doc.exists;
+  }
+
+  function renderSuggestions(items) {
+    suggestionsBox.innerHTML = "";
+    if (!items || items.length === 0) {
+      suggestionsBox.innerHTML = `<p class="has-text-grey">No matching users</p>`;
+      return;
+    }
+
+    const ul = document.createElement("ul");
+    ul.style.listStyle = "none";
+    ul.style.padding = "0";
+    ul.style.margin = "0";
+
+    items.forEach((item) => {
+      const li = document.createElement("li");
+      li.className = "box suggestion-item";
+      li.style.cursor = "pointer";
+      li.style.marginBottom = "0.5rem";
+      // display "Name — email"
+      const name = document.createElement("div");
+      name.textContent = `${item.user_name || "(no name)"} — ${
+        item.user_email
+      }`;
+      li.appendChild(name);
+
+      // click -> select user for editing
+      li.addEventListener("click", async () => {
+        await selectUser(item.user_email);
+      });
+
+      ul.appendChild(li);
+    });
+
+    suggestionsBox.appendChild(ul);
+  }
+
+  // Select a user and populate edit form
+  async function selectUser(email) {
+    const user = await loadUserByEmail(email);
+    if (!user) {
+      configure_messages_bar("User not found.");
+      return;
+    }
+    selectedUserEmail = email;
+    editSection.classList.remove("is-hidden");
+    editNameInput.value = user.user_name || "";
+    editEmailInput.value = user.user_email || ""; // read-only
+    // read current admin status
+    const isAdmin = await getAdminStatus(email);
+    editIsAdminCheckbox.checked = !!isAdmin;
+
+    // scroll suggestions box a bit so admin sees edit section
+    editSection.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // Save changes (only name and admin status)
+  async function saveSelectedUser() {
+    if (!selectedUserEmail) return configure_messages_bar("No user selected.");
+
+    const newName = (editNameInput.value || "").trim();
+    const wantAdmin = !!editIsAdminCheckbox.checked;
+    if (!newName) return configure_messages_bar("Name cannot be empty.");
+
+    try {
+      // Update user_profile document (doc ID = email)
+      await db.collection("user_profile").doc(selectedUserEmail).update({
+        user_name: newName,
+        // you could add updated_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // Update admins collection
+      const adminRef = db.collection("admins").doc(selectedUserEmail);
+      if (wantAdmin) {
+        await adminRef.set({ is_admin: true });
+      } else {
+        // remove admin if exists
+        const doc = await adminRef.get();
+        if (doc.exists) await adminRef.delete();
+      }
+
+      await loadAllUsers();
+      configure_messages_bar("User updated.");
+      // refresh suggestions and re-select to refresh UI
+      await refreshSuggestionsAndSelection();
+    } catch (err) {
+      console.error("Error saving user", err);
+      configure_messages_bar("Error updating user.");
+    }
+  }
+
+  // Delete user (Firestore only)
+  async function deleteSelectedUser() {
+    if (!selectedUserEmail) return configure_messages_bar("No user selected.");
+
+    if (
+      !confirm(
+        `Delete user ${selectedUserEmail}? This removes user_profile and admin record (Auth account NOT deleted).`
+      )
+    )
+      return;
+
+    try {
+      await db.collection("user_profile").doc(selectedUserEmail).delete();
+      // delete admin doc if exists
+      const adminRef = db.collection("admins").doc(selectedUserEmail);
+      const adminDoc = await adminRef.get();
+      if (adminDoc.exists) await adminRef.delete();
+      await loadAllUsers();
+      configure_messages_bar("User removed (Firestore).");
+
+      // Clear selection and refresh
+      selectedUserEmail = null;
+      editSection.classList.add("is-hidden");
+      editNameInput.value = "";
+      editEmailInput.value = "";
+
+      // Refresh suggestions
+      await refreshSuggestionsAndSelection();
+    } catch (err) {
+      console.error("Error deleting user", err);
+      configure_messages_bar("Error deleting user.");
+    }
+  }
+
+  // Create new user: creates user_profile doc, then admin doc if needed
+  async function createNewUser() {
+    const name = (newNameInput.value || "").trim();
+    const email = (newEmailInput.value || "").trim();
+    const password = newPasswordInput.value || ""; // this will NOT be used for Auth
+    const makeAdmin = !!newIsAdminCheckbox.checked;
+
+    if (!name || !email) {
+      return configure_messages_bar("Name and email are required.");
+    }
+
+    // Basic email pattern check
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return configure_messages_bar("Enter a valid email address.");
+    }
+
+    try {
+      // Only create Firestore user_profile
+      await db.collection("user_profile").doc(email).set({
+        user_email: email,
+        user_name: name,
+        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // Optionally add to admin collection
+      if (makeAdmin) {
+        await db.collection("admins").doc(email).set({ is_admin: true });
+      }
+      await loadAllUsers();
+      // Clear fields
+      newNameInput.value = "";
+      newEmailInput.value = "";
+      newPasswordInput.value = "";
+      newIsAdminCheckbox.checked = false;
+
+      configure_messages_bar("User created in Firestore.");
+
+      await refreshSuggestionsAndSelection();
+    } catch (err) {
+      console.error("Error creating user", err);
+      configure_messages_bar("Error creating user. Check console for details.");
+    }
+  }
+
+  // Utility: refresh suggestions (for current search input), optionally reselect current user
+  async function refreshSuggestionsAndSelection() {
+    const q = searchInput.value.trim();
+    const items = q ? await fetchUserSuggestions(q) : [];
+    suggestionResults = items;
+    renderSuggestions(items);
+
+    // If still have selectedUserEmail, try to reselect to refresh displayed values.
+    if (selectedUserEmail) {
+      const stillExists = await db
+        .collection("user_profile")
+        .doc(selectedUserEmail)
+        .get();
+      if (stillExists.exists) {
+        await selectUser(selectedUserEmail);
+      } else {
+        // If it was deleted, clear selection UI
+        selectedUserEmail = null;
+        editSection.classList.add("is-hidden");
+        editNameInput.value = "";
+        editEmailInput.value = "";
+      }
+    }
+  }
+
+  // Debounced search
+  const onSearchChange = debounce(async (ev) => {
+    const q = ev.target.value || "";
+    if (!q) {
+      suggestionsBox.innerHTML =
+        "<p class='has-text-grey'>Enter name or email to search</p>";
+      return;
+    }
+    const items = await fetchUserSuggestions(q);
+    suggestionResults = items;
+    renderSuggestions(items);
+  }, 200);
+
+  searchInput.addEventListener("input", onSearchChange);
+
+  // Save & delete buttons
+  if (saveUserBtn) saveUserBtn.addEventListener("click", saveSelectedUser);
+  if (deleteUserBtn)
+    deleteUserBtn.addEventListener("click", deleteSelectedUser);
+
+  // Create new user
+  if (createNewUserBtn)
+    createNewUserBtn.addEventListener("click", createNewUser);
+
+  // When modal opens, clear previous state
+  const manageUsersModal = document.getElementById("manageUsersModal");
+  if (manageUsersModal) {
+    // If you have a generic function that opens modal, hook into it instead.
+    // For simplicity, watch for 'is-active' class being added (mutation) or
+    // attach to the modal trigger.
+    const triggers = document.querySelectorAll(
+      '[data-target="manageUsersModal"]'
+    );
+    triggers.forEach((t) => {
+      t.addEventListener("click", () => {
+        // reset UI
+        searchInput.value = "";
+        suggestionsBox.innerHTML =
+          "<p class='has-text-grey'>Enter name or email to search</p>";
+        editSection.classList.add("is-hidden");
+        selectedUserEmail = null;
+      });
+    });
+  }
+
+  // Initial suggestion placeholder
+  suggestionsBox.innerHTML =
+    "<p class='has-text-grey'>Enter name or email to search</p>";
+});
+
+// count number of user_profile documents and display in admin dashboard
+function updateMemberCount() {
+  db.collection("user_profile").onSnapshot(
+    (snapshot) => {
+      const count = snapshot.size;
+      const memberCountEl = document.getElementById("memberCount");
+      if (memberCountEl) {
+        memberCountEl.innerHTML = `Total Users Accounts: ${count}`;
+      }
+    },
+    (err) => {
+      console.error("Error counting users:", err);
+    }
+  );
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateMemberCount();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateMemberCount();
+
+  loadAllUsers();
 });
