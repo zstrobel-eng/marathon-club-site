@@ -1032,20 +1032,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // count number of user_profile documents and display in admin dashboard
 function updateMemberCount() {
-  db.collection("user_profile")
-    .get()
-    .then((snapshot) => {
+  db.collection("user_profile").onSnapshot(
+    (snapshot) => {
       const count = snapshot.size;
       const memberCountEl = document.getElementById("memberCount");
-
       if (memberCountEl) {
-        memberCountEl.textContent = `Total Users Accounts: ${count}`;
+        memberCountEl.innerHTML = `Total Users Accounts: ${count}`;
       }
-    })
-    .catch((err) => {
+    },
+    (err) => {
       console.error("Error counting users:", err);
-    });
+    }
+  );
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateMemberCount();
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   updateMemberCount();

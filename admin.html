@@ -107,13 +107,9 @@
                     cannot be undone.
                   </li>
                   <li class="pt-2">
-                    - Selecting the "Make Admin" checkbox will grant the user
+                    - Selecting the "Admin User" checkbox will grant the user
                     admin privileges. Admin priveleges allow users to access the
                     admin dashboard and manage site content.
-                  </li>
-                  <li class="pt-2">
-                    - After creating user accounts, users will still have to
-                    sign up so that a password is set.
                   </li>
                 </ul>
               </div>
@@ -431,9 +427,9 @@
           <hr />
 
           <!-- ADD NEW USER -->
-          <h2 class="subtitle">Add New User</h2>
+          <h2 class="subtitle is-hidden">Add New User</h2>
 
-          <div class="field">
+          <div class="field is-hidden">
             <input
               id="newUserName"
               class="input"
@@ -442,7 +438,7 @@
             />
           </div>
 
-          <div class="field">
+          <div class="field is-hidden">
             <input
               id="newUserEmail"
               class="input"
@@ -460,12 +456,12 @@
             />
           </div>
 
-          <label class="checkbox">
+          <label class="checkbox is-hidden">
             <input type="checkbox" id="newIsAdmin" />
             Make Admin
           </label>
 
-          <button id="createNewUser" class="button is-success mt-2">
+          <button id="createNewUser" class="button is-success mt-2 is-hidden">
             Create User
           </button>
         </section>
