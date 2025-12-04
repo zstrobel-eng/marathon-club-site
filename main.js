@@ -377,7 +377,7 @@ setTimeout(() => {
       });
     }
   });
-}, 1000);
+}, 100);
 
 // Sign up
 const signUpForm = r_e("signUpForm");
