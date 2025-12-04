@@ -597,15 +597,15 @@ if (r_e("attendClose")) {
 //   });
 // });
 
-// // Accordion toggle behavior
-// document.querySelectorAll(".accordion-header").forEach((header) => {
-//   header.addEventListener("click", () => {
-//     const body = header.parentElement.querySelector(".accordion-body");
-//     body.classList.toggle("is-hidden");
-//     const icon = header.querySelector(".icon");
-//     icon.textContent = body.classList.contains("is-hidden") ? "+" : "–";
-//   });
-// });
+// Accordion toggle behavior
+document.querySelectorAll(".accordion-header").forEach((header) => {
+  header.addEventListener("click", () => {
+    const body = header.parentElement.querySelector(".accordion-body");
+    body.classList.toggle("is-hidden");
+    const icon = header.querySelector(".icon");
+    icon.textContent = body.classList.contains("is-hidden") ? "+" : "–";
+  });
+});
 
 // ************************** Route Data **************************
 
