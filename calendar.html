@@ -83,25 +83,11 @@
         <p class="subtitle">
           Upcoming practices, races, and events. RSVP below.
         </p>
-
-        <div class="box">
-          <h2 class="title is-5">Long Run - Saturday, Oct 5</h2>
-          <p>
-            Meet at Memorial Union, 8:00 AM. 10-mile loop around Lake Monona.
-          </p>
-          <button id="rsvp1" class="button is-link is-hidden">RSVP</button>
-          <button id="attend1" class="button is-link">Attendees</button>
-        </div>
-
-        <div class="box">
-          <h2 class="title is-5">Tempo Run - Tuesday, Oct 8</h2>
-          <p>
-            Meet at Camp Randall, 6:00 PM. 6 miles total with 3 miles at tempo
-            pace.
-          </p>
-          <button id="rsvp2" class="button is-link">RSVP</button>
-          <button id="attend2" class="button is-link">Attendees</button>
-        </div>
+        <div id="eventContent"></div>
+      </div>
+      <div class="box">
+        <h2 class="title is-5">Add an Event</h2>
+        <button id="createEvent" class="button">Add Event</button>
       </div>
     </section>
 
@@ -246,45 +232,100 @@
       </div>
     </div>
 
-    <!-- RSVP Modal -->
-    <div id="rsvpModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Would you like to RSVP?</p>
-          <button id="rsvpClose" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <p>
-            <button id="rsvpYes" class="button is-link" type="button">
-              Yes
-            </button>
-            <button id="rsvpNo" class="button is-link" type="button">No</button>
-          </p>
-        </section>
-      </div>
-    </div>
+    <!-- RSVP Modals -->
+    <div id="rsvpModals"></div>
 
     <!-- Attendees Modal -->
-    <div id="attendModal" class="modal">
+    <div id="attendModals"></div>
+
+    <!-- Create Events Modal -->
+    <div id="createEventModal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Current Responses</p>
-          <button id="attendClose" class="delete" aria-label="close"></button>
+          <p class="modal-card-title">Add an Event</p>
+          <button
+            id="createEventClose"
+            class="delete"
+            aria-label="close"
+          ></button>
         </header>
-        <section class="modal-card-body">
-          <div class="columns">
-            <div id="attending" class="column">
-              <h1>Will Be Attending</h1>
-              <p></p>
-            </div>
-            <div id="not_attending" class="column">
-              <h1>Will Not Be Attending</h1>
-              <p></p>
+
+        <!-- FORM START -->
+        <form id="createEventForm" class="modal-card-body">
+          <div class="field">
+            <label class="label">Event ID</label>
+            <div class="control">
+              <input
+                id="eventID"
+                name="eventID"
+                class="input"
+                type="number"
+                placeholder="Event ID (Unique Number)"
+                required
+              />
             </div>
           </div>
-        </section>
+          <div class="field">
+            <label class="label">Event Date</label>
+            <div class="control">
+              <input
+                id="eventDate"
+                name="eventDate"
+                class="input"
+                type="date"
+                placeholder="Event Date"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Start Time</label>
+            <div class="control">
+              <input
+                id="eventTime"
+                name="eventTime"
+                class="input"
+                type="time"
+                placeholder="Start Time"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Event Title</label>
+            <div class="control">
+              <input
+                id="eventTitle"
+                name="title"
+                class="input"
+                type="text"
+                placeholder="Event Title"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Event Description</label>
+            <div class="control">
+              <textarea
+                id="eventDescription"
+                name="description"
+                rows="4"
+                cols="50"
+                placeholder="Event Description"
+                required
+              ></textarea>
+            </div>
+          </div>
+
+          <footer class="modal-card-foot">
+            <button id="submitEvent" class="button is-primary">
+              Post Event
+            </button>
+          </footer>
+        </form>
+        <!-- FORM END -->
       </div>
     </div>
 
