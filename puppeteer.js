@@ -10,7 +10,9 @@ function parseArg(name) {
 }
 
 const baseURL =
-  process.env.BASE_URL || parseArg("url") || "http://localhost:5000";
+  process.env.BASE_URL ||
+  parseArg("url") ||
+  "https://marathon-club-site.web.app/";
 const headlessArg = parseArg("headless");
 const headless =
   headlessArg === undefined
