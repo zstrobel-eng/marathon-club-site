@@ -80,7 +80,7 @@ function show_events() {
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">Would you like to RSVP?</p>
+                <p class="modal-card-title">Select to add/change RSVP status</p>
                 <button
                   id="rsvpClose${d.id}"
                   class="delete"
@@ -232,7 +232,7 @@ function yes_rsvp(id) {
               .then(() => {});
           });
         r_e(`rsvpModal${id}`).classList.remove("is-active");
-        r_e(`rsvp${id}`).classList.add("is-hidden");
+        // r_e(`rsvp${id}`).classList.add("is-hidden");
       }
     });
 }
@@ -269,7 +269,7 @@ function no_rsvp(id) {
               .then(() => {});
           });
         r_e(`rsvpModal${id}`).classList.remove("is-active");
-        r_e(`rsvp${id}`).classList.add("is-hidden");
+        // r_e(`rsvp${id}`).classList.add("is-hidden");
       }
     });
 }
@@ -339,39 +339,43 @@ setTimeout(() => {
           let mydocs = mydata.docs;
           let profileName = "";
           mydocs.forEach((doc) => {
-            profileName = doc.data().user_name; // assuming one doc per user
+            profileName = doc.data().user_name;
           });
           r_e("profileName").innerHTML = profileName;
         });
 
+      document.querySelectorAll(".rsvp").forEach((btn) => {
+        btn.classList.remove("is-hidden");
+      });
+
       // Get RSVPs for this user
-      db.collection("rsvp")
-        .where("user_email", "==", current_email)
-        .get()
-        .then((e) => {
-          let rsvpedEventIds = new Set();
+      // db.collection("rsvp")
+      //   .where("user_email", "==", current_email)
+      //   .get()
+      //   .then((e) => {
+      //     let rsvpedEventIds = new Set();
 
-          e.forEach((doc) => {
-            const eventId = doc.data().eventid; // <-- read event ID field
-            rsvpedEventIds.add(eventId.toString());
-          });
+      //     e.forEach((doc) => {
+      //       const eventId = doc.data().eventid;
+      //       rsvpedEventIds.add(eventId.toString());
+      //     });
 
-          // Loop through all RSVP buttons
-          rsvpButtons.forEach((btn) => {
-            let eventId = btn.id.replace("rsvp", "");
+      //     // Loop through all RSVP buttons
+      //     rsvpButtons.forEach((btn) => {
+      //       let eventId = btn.id.replace("rsvp", "");
 
-            if (!rsvpedEventIds.has(eventId)) {
-              btn.classList.remove("is-hidden");
-            }
-          });
-        });
+      //       if (!rsvpedEventIds.has(eventId)) {
+      //         btn.classList.remove("is-hidden");
+      //       }
+      //     });
+      //   });
     } else {
       // User logged out
       configure_nav_bar();
       r_e("userEmail").innerHTML = "";
       r_e("profileName").innerHTML = "";
 
-      // Optionally hide all RSVP buttons
+      // Hide all RSVP buttons if signed out
       document.querySelectorAll(".rsvp").forEach((btn) => {
         btn.classList.add("is-hidden");
       });
@@ -746,6 +750,8 @@ if (r_e("signUpBtn")) {
 if (r_e("signUpClose")) {
   r_e("signUpClose").addEventListener("click", () => {
     r_e("signUpModal").classList.remove("is-active");
+    signUpForm.reset();
+    r_e("signUpError").innerHTML = "";
   });
 }
 
@@ -778,6 +784,8 @@ if (r_e("signInBtn")) {
 if (r_e("signInClose")) {
   r_e("signInClose").addEventListener("click", () => {
     signInModal.classList.remove("is-active");
+    r_e("signInForm").reset();
+    r_e("signInError").innerHTML = "";
   });
 }
 

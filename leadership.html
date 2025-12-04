@@ -178,7 +178,7 @@
           <button id="signUpClose" class="delete" aria-label="close"></button>
         </header>
 
-        <!-- FORM START -->
+        <!-- form start -->
         <form id="signUpForm" class="modal-card-body">
           <div class="field">
             <label class="label">Full Name</label>
@@ -192,6 +192,7 @@
               />
             </div>
           </div>
+
           <div class="field">
             <label class="label">Email</label>
             <div class="control">
@@ -205,6 +206,7 @@
               />
             </div>
           </div>
+
           <div class="field">
             <label class="label">Password</label>
             <div class="control">
@@ -218,13 +220,18 @@
               />
             </div>
           </div>
+
+          <!-- error message box -->
+          <p id="signUpError" class="has-text-danger" style="display: none"></p>
+
+          <!-- Success message box -->
           <p id="signupMessage" class="has-text-success"></p>
 
           <footer class="modal-card-foot">
             <button type="submit" class="button is-primary">Sign Up</button>
           </footer>
         </form>
-        <!-- FORM END -->
+        <!-- form end -->
       </div>
     </div>
 
@@ -237,7 +244,7 @@
           <button id="signInClose" class="delete" aria-label="close"></button>
         </header>
 
-        <!-- FORM START -->
+        <!-- Form start -->
         <form id="signInForm" class="modal-card-body">
           <div class="field">
             <label class="label">Email</label>
@@ -267,6 +274,11 @@
             </div>
           </div>
 
+          <!-- Forgot password link -->
+          <p class="help">
+            <a id="forgotPasswordLink">Forgot your password?</a>
+          </p>
+
           <!-- revised this feature so that admins dont use the code to sign in -->
           <!-- <div class="field">
             <label class="checkbox">
@@ -287,11 +299,67 @@
             </div>
           </div> -->
 
+          <!-- error message -->
+          <p
+            id="signInError"
+            class="has-text-danger"
+            style="display: none; margin-top: 10px"
+          ></p>
+
           <footer class="modal-card-foot">
             <button type="submit" class="button is-primary">Sign In</button>
           </footer>
         </form>
-        <!-- FORM END -->
+        <!-- form end -->
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Reset Password</p>
+          <button
+            id="forgotPasswordClose"
+            class="delete"
+            aria-label="close"
+          ></button>
+        </header>
+
+        <form id="forgotPasswordForm" class="modal-card-body">
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input
+                id="forgotPasswordEmail"
+                class="input"
+                type="email"
+                placeholder="Enter your account email"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Error + success messages -->
+          <p
+            id="forgotPasswordError"
+            class="has-text-danger"
+            style="display: none; margin-top: 8px"
+          ></p>
+
+          <p
+            id="forgotPasswordSuccess"
+            class="has-text-success"
+            style="display: none; margin-top: 8px"
+          ></p>
+
+          <footer class="modal-card-foot">
+            <button type="submit" class="button is-primary">
+              Send reset email
+            </button>
+          </footer>
+        </form>
       </div>
     </div>
 
