@@ -280,9 +280,6 @@ function configureAdminNav(email) {
     .catch((err) => console.error("Error checking admin status:", err));
 }
 
-// =========================
-// Hook into auth state change
-// =========================
 auth.onAuthStateChanged((user) => {
   const email = user ? user.email : null;
   configureAdminNav(email);
@@ -1119,7 +1116,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update user_profile document (doc ID = email)
       await db.collection("user_profile").doc(selectedUserEmail).update({
         user_name: newName,
-        // you could add updated_at: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       // Update admins collection
@@ -1284,9 +1280,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // When modal opens, clear previous state
   const manageUsersModal = document.getElementById("manageUsersModal");
   if (manageUsersModal) {
-    // If you have a generic function that opens modal, hook into it instead.
-    // For simplicity, watch for 'is-active' class being added (mutation) or
-    // attach to the modal trigger.
     const triggers = document.querySelectorAll(
       '[data-target="manageUsersModal"]'
     );
