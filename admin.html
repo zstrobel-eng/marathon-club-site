@@ -197,6 +197,7 @@
                 <a
                   class="card-footer-item modal-trigger"
                   data-target="createEventModal"
+                  id="createEvent"
                   >Create Event</a
                 >
                 <a
@@ -529,33 +530,94 @@
       </div>
     </div>
 
+    <!-- Create Events Modal -->
     <div id="createEventModal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Create Event</p>
-          <button class="delete close-modal" aria-label="close"></button>
+          <p class="modal-card-title">Add an Event</p>
+          <button
+            id="createEventClose"
+            class="delete"
+            aria-label="close"
+          ></button>
         </header>
-        <section class="modal-card-body">
+
+        <!-- FORM START -->
+        <form id="createEventForm" class="modal-card-body">
+          <div class="field">
+            <label class="label">Event ID</label>
+            <div class="control">
+              <input
+                id="eventID"
+                name="eventID"
+                class="input"
+                type="number"
+                placeholder="Event ID (Unique Number)"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Event Date</label>
+            <div class="control">
+              <input
+                id="eventDate"
+                name="eventDate"
+                class="input"
+                type="date"
+                placeholder="Event Date"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Start Time</label>
+            <div class="control">
+              <input
+                id="eventTime"
+                name="eventTime"
+                class="input"
+                type="time"
+                placeholder="Start Time"
+                required
+              />
+            </div>
+          </div>
           <div class="field">
             <label class="label">Event Title</label>
-            <input class="input" type="text" placeholder="Enter event title" />
+            <div class="control">
+              <input
+                id="eventTitle"
+                name="title"
+                class="input"
+                type="text"
+                placeholder="Event Title"
+                required
+              />
+            </div>
           </div>
           <div class="field">
-            <label class="label">Date</label>
-            <input class="input" type="date" />
+            <label class="label">Event Description</label>
+            <div class="control">
+              <textarea
+                id="eventDescription"
+                name="description"
+                rows="4"
+                cols="50"
+                placeholder="Event Description"
+                required
+              ></textarea>
+            </div>
           </div>
-          <div class="field">
-            <label class="label">Description</label>
-            <textarea
-              class="textarea"
-              placeholder="Enter event details"
-            ></textarea>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-primary">Save Event</button>
-        </footer>
+
+          <footer class="modal-card-foot">
+            <button id="submitEvent" class="button is-primary">
+              Post Event
+            </button>
+          </footer>
+        </form>
+        <!-- FORM END -->
       </div>
     </div>
 
